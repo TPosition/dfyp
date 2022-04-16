@@ -46,11 +46,9 @@ dependencies:
     path: packages/transactions_repository
   users_repository:
     path: packages/users_repository
+  storage_repository:
+    path: packages/storage_repository
   razorpay_flutter: ^1.2.3
-
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
