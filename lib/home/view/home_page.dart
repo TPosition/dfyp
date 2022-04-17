@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '/app/app.dart';
 import '/common/widgets/avatar.dart';
 import '/current_user/bloc/current_user_bloc.dart';
@@ -37,20 +38,6 @@ class HomePage extends StatelessWidget {
                     height: 40,
                   ),
                   Text(
-                    "My wallet",
-                    style: GoogleFonts.roboto(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  _balanceCard(context, user),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  Text(
                     "Operations",
                     style: GoogleFonts.roboto(
                       fontSize: 20,
@@ -58,8 +45,13 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    height: 15,
+                    height: 30,
                   ),
+                  _operationsWidget(context),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  _operationsWidget2(context),
                 ],
               ),
             ),
@@ -121,7 +113,8 @@ class HomePage extends StatelessWidget {
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                           ),
-                          child: const Icon(Icons.document_scanner_outlined),
+                          child:
+                              const FaIcon(FontAwesomeIcons.envelopeOpenText),
                         ),
                       );
                     }
@@ -131,7 +124,7 @@ class HomePage extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.only(top: 10),
                   child: Text(
-                    "Scan",
+                    "License Application",
                     style: GoogleFonts.roboto(
                       textStyle: Theme.of(context).textTheme.headline4,
                       fontSize: 16,
@@ -158,13 +151,13 @@ class HomePage extends StatelessWidget {
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
-                    child: const Icon(Icons.transfer_within_a_station),
+                    child: const FaIcon(FontAwesomeIcons.idCard),
                   ),
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 10),
                   child: Text(
-                    "Transfer",
+                    "License Renewal",
                     style: GoogleFonts.roboto(
                       textStyle: Theme.of(context).textTheme.headline4,
                       fontSize: 16,
@@ -184,20 +177,98 @@ class HomePage extends StatelessWidget {
                   minWidth: 90,
                   child: RaisedButton(
                     onPressed: () {
-                      // Navigator.of(context).push(QRCode.route());
+                      // Navigator.of(context).push(SelectAccountPage.route());
                     },
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     color: Colors.white,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
-                    child: const Icon(Icons.call_received),
+                    child: const FaIcon(FontAwesomeIcons.fileCircleCheck),
                   ),
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 10),
                   child: Text(
-                    "Request",
+                    "Application Status",
+                    style: GoogleFonts.roboto(
+                      textStyle: Theme.of(context).textTheme.headline4,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xff76797e),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      );
+
+  Widget _operationsWidget2(final BuildContext context) => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Expanded(
+            child: Column(
+              children: [
+                BlocBuilder<UsersBloc, UsersState>(
+                  builder: (final context, final state) {
+                    if (state is UsersLoaded) {
+                      final users = state.users;
+                      return ButtonTheme(
+                        height: 90,
+                        minWidth: 90,
+                        child: RaisedButton(
+                          onPressed: () {},
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          color: Colors.white,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: const FaIcon(FontAwesomeIcons.gavel),
+                        ),
+                      );
+                    }
+                    return const CircularProgressIndicator();
+                  },
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 10),
+                  child: Text(
+                    "Compound",
+                    style: GoogleFonts.roboto(
+                      textStyle: Theme.of(context).textTheme.headline4,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xff76797e),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                ButtonTheme(
+                  height: 90,
+                  minWidth: 90,
+                  child: RaisedButton(
+                    onPressed: () {
+                      // Navigator.of(context).push(SelectAccountPage.route());
+                    },
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    color: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: const FaIcon(FontAwesomeIcons.commentDots),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 10),
+                  child: Text(
+                    "Complaint",
                     style: GoogleFonts.roboto(
                       textStyle: Theme.of(context).textTheme.headline4,
                       fontSize: 16,
