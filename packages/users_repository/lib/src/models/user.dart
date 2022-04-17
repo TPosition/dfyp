@@ -11,6 +11,7 @@ class User extends Equatable {
     required final this.email,
     required final this.mobile,
     required final this.photoURL,
+    required final this.address,
   });
 
   final String uid;
@@ -19,6 +20,7 @@ class User extends Equatable {
   final String email;
   final String mobile;
   final String photoURL;
+  final String address;
 
   User copyWith({
     final double? balance,
@@ -26,6 +28,7 @@ class User extends Equatable {
     final String? email,
     final String? mobile,
     final String? photoURL,
+    final String? address,
   }) =>
       User(
         uid: uid,
@@ -34,11 +37,12 @@ class User extends Equatable {
         email: email ?? this.email,
         mobile: mobile ?? this.mobile,
         photoURL: photoURL ?? this.photoURL,
+        address: address ?? this.address,
       );
 
   @override
   String toString() =>
-      'User{uid: $uid,balance: $balance,displayName: $displayName,email: $email,mobile: $mobile,photoURL: $photoURL}';
+      'User{uid: $uid,balance: $balance,displayName: $displayName,email: $email,mobile: $mobile,photoURL: $photoURL,address: $address}';
 
   UserEntity toEntity() => UserEntity(
         uid: uid,
@@ -47,23 +51,28 @@ class User extends Equatable {
         email: email,
         mobile: mobile,
         photoURL: photoURL,
+        address: address,
       );
 
   static User fromEntity(final UserEntity entity) => User(
-      uid: entity.uid,
-      balance: entity.balance,
-      displayName: entity.displayName,
-      email: entity.email,
-      mobile: entity.mobile,
-      photoURL: entity.photoURL);
+        uid: entity.uid,
+        balance: entity.balance,
+        displayName: entity.displayName,
+        email: entity.email,
+        mobile: entity.mobile,
+        photoURL: entity.photoURL,
+        address: entity.address,
+      );
 
   static User empty() => const User(
-      uid: "",
-      balance: 0,
-      displayName: "",
-      email: "",
-      mobile: "",
-      photoURL: "");
+        uid: "",
+        balance: 0,
+        displayName: "",
+        email: "",
+        mobile: "",
+        photoURL: "",
+        address: "",
+      );
 
   @override
   List<Object?> get props => [
@@ -73,5 +82,6 @@ class User extends Equatable {
         email,
         mobile,
         photoURL,
+        address,
       ];
 }

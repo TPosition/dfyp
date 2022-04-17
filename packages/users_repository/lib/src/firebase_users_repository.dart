@@ -44,6 +44,7 @@ class FirebaseUsersRepository implements UsersRepository {
           email: "",
           mobile: "",
           photoURL: "",
+          address: "",
         );
       });
 }

@@ -29,6 +29,7 @@ class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
             email: "",
             mobile: "",
             photoURL: "",
+            address: "",
           ),
         );
         add(CurrentUserChanged(CurrentUserStatus.incompleted, currentUser));
@@ -37,7 +38,8 @@ class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
       if (currentUser.displayName.isEmpty ||
           currentUser.mobile.isEmpty ||
           currentUser.email.isEmpty ||
-          currentUser.photoURL.isEmpty) {
+          currentUser.photoURL.isEmpty ||
+          currentUser.address.isEmpty) {
         add(CurrentUserChanged(CurrentUserStatus.incompleted, currentUser));
       } else {
         add(CurrentUserChanged(CurrentUserStatus.completed, currentUser));

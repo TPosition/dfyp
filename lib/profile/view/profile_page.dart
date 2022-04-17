@@ -25,7 +25,6 @@ class ProfilePage extends StatelessWidget {
                     return Column(
                       children: <Widget>[
                         Container(
-                          height: 150,
                           color: Colors.white,
                           child: Column(
                             children: <Widget>[
@@ -65,6 +64,14 @@ class ProfilePage extends StatelessWidget {
                                   height: 15,
                                 ),
                                 _InfoUserMobile(user: user),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                const _InfoAddress(),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                _InfoUserAddress(user: user),
                               ],
                             ),
                           ),
@@ -234,6 +241,55 @@ class _InfoName extends StatelessWidget {
       ));
 }
 
+class _InfoUserAddress extends StatelessWidget {
+  const _InfoUserAddress({
+    required final this.user,
+    final Key? key,
+  }) : super(key: key);
+
+  final User user;
+
+  @override
+  Widget build(final BuildContext context) => Padding(
+      padding: const EdgeInsets.only(left: 25, right: 25, top: 2),
+      child: Row(
+        children: <Widget>[
+          Flexible(
+            child: Text(
+              user.address,
+              style: GoogleFonts.roboto(
+                fontSize: 18,
+              ),
+            ),
+          ),
+        ],
+      ));
+}
+
+class _InfoAddress extends StatelessWidget {
+  const _InfoAddress({
+    final Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(final BuildContext context) => Padding(
+      padding: const EdgeInsets.only(left: 25, right: 25, top: 25),
+      child: Row(
+        children: <Widget>[
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                'Address',
+                style: GoogleFonts.roboto(
+                    fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ],
+      ));
+}
+
 class _ProfileAvatar extends StatelessWidget {
   const _ProfileAvatar({
     required final this.user,
@@ -243,18 +299,31 @@ class _ProfileAvatar extends StatelessWidget {
   final User user;
 
   @override
-  Widget build(final BuildContext context) => Expanded(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Avatar(
-                photo: user.photoURL,
-                avatarSize: 48,
+  Widget build(final BuildContext context) => Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+              width: 100,
+              child: Image.network(
+                user.photoURL,
+                fit: BoxFit.fitWidth,
+                loadingBuilder: (final BuildContext context, final Widget child,
+                    final ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
+                    ),
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
 }

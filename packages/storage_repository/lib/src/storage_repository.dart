@@ -7,9 +7,9 @@ import 'dart:async';
 import 'package:storage_repository/storage_repository.dart';
 
 abstract class StorageRepository {
-  Future<void> addImage(Storage Storage);
+  Future<void> addImage(String path);
 
-  Future<String> getImageURL(Storage Storage);
+  Future<String> getImageURL(String path);
 
   // Future<void> deleteImage(Transaction Transaction);
 

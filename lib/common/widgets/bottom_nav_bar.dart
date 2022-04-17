@@ -29,6 +29,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
         ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _selectedIndex,
+          selectedLabelStyle: _optionStyle,
+          selectedItemColor: Colors.black,
+          unselectedLabelStyle: _optionStyle,
           onTap: (final index) {
             setState(() {
               _selectedIndex = index;
@@ -42,24 +45,18 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   : Image.asset('assets/ico_home.png'),
               label: 'Home',
             ),
-            // BottomNavigationBarItem(
-            //   icon: _selectedIndex == 1
-            //       ? Image.asset('assets/ico_history_selected.png')
-            //       : Image.asset('assets/ico_history.png'),
-            //   title: Text(
-            //     'History',
-            //     style: _optionStyle,
-            //   ),
-            // ),
-            // BottomNavigationBarItem(
-            //   icon: _selectedIndex == 2
-            //       ? Image.asset('assets/ico_profile_selected.png')
-            //       : Image.asset('assets/ico_profile.png'),
-            //   title: Text(
-            //     'Profile',
-            //     style: _optionStyle,
-            //   ),
-            // ),
+            BottomNavigationBarItem(
+              icon: _selectedIndex == 1
+                  ? Image.asset('assets/ico_history_selected.png')
+                  : Image.asset('assets/ico_history.png'),
+              label: 'History',
+            ),
+            BottomNavigationBarItem(
+              icon: _selectedIndex == 2
+                  ? Image.asset('assets/ico_profile_selected.png')
+                  : Image.asset('assets/ico_profile.png'),
+              label: 'Profile',
+            ),
           ],
         ),
       );

@@ -12,6 +12,7 @@ class CurrentUserState extends Equatable {
       email: "",
       mobile: "",
       photoURL: "",
+      address: "",
     ),
   });
 

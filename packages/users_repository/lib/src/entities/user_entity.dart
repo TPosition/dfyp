@@ -12,6 +12,7 @@ class UserEntity extends Equatable {
   final String email;
   final String mobile;
   final String photoURL;
+  final String address;
 
   const UserEntity({
     required this.uid,
@@ -20,18 +21,18 @@ class UserEntity extends Equatable {
     required this.email,
     required this.mobile,
     required this.photoURL,
+    required this.address,
   });
 
-  Map<String, Object?> toJson() {
-    return {
-      'uid': uid,
-      'balance': balance,
-      'displayName': displayName,
-      'email': email,
-      'mobile': mobile,
-      'photoURL': photoURL
-    };
-  }
+  Map<String, Object?> toJson() => {
+        'uid': uid,
+        'balance': balance,
+        'displayName': displayName,
+        'email': email,
+        'mobile': mobile,
+        'photoURL': photoURL,
+        "address": address,
+      };
 
   @override
   List<Object?> get props => [
@@ -41,25 +42,24 @@ class UserEntity extends Equatable {
         email,
         mobile,
         photoURL,
+        address,
       ];
 
   @override
-  String toString() {
-    return 'UserEntity {uid: $uid,balance: $balance,displayName: $displayName,email: $email,mobile: $mobile,photoURL: $photoURL}';
-  }
+  String toString() =>
+      'UserEntity {uid: $uid,balance: $balance,displayName: $displayName,email: $email,mobile: $mobile,photoURL: $photoURL}';
 
-  static UserEntity fromJson(Map<String, Object> json) {
-    return UserEntity(
-      uid: json['uid'] as String,
-      balance: json['balance'] as double,
-      displayName: json['displayName'] as String,
-      email: json['email'] as String,
-      mobile: json['mobile'] as String,
-      photoURL: json['photoURL'] as String,
-    );
-  }
+  static UserEntity fromJson(final Map<String, Object> json) => UserEntity(
+        uid: json['uid'] as String,
+        balance: json['balance'] as double,
+        displayName: json['displayName'] as String,
+        email: json['email'] as String,
+        mobile: json['mobile'] as String,
+        photoURL: json['photoURL'] as String,
+        address: json['address'] as String,
+      );
 
-  static UserEntity fromSnapshot(DocumentSnapshot snap) {
+  static UserEntity fromSnapshot(final DocumentSnapshot snap) {
     final data = snap.data();
     if (data == null) throw Exception();
     return UserEntity(
@@ -69,17 +69,17 @@ class UserEntity extends Equatable {
       email: data['email'],
       mobile: data['mobile'],
       photoURL: data['photoURL'],
+      address: data['address'],
     );
   }
 
-  Map<String, Object?> toDocument() {
-    return {
-      'uid': uid,
-      'balance': balance,
-      'displayName': displayName,
-      'email': email,
-      'mobile': mobile,
-      'photoURL': photoURL
-    };
-  }
+  Map<String, Object?> toDocument() => {
+        'uid': uid,
+        'balance': balance,
+        'displayName': displayName,
+        'email': email,
+        'mobile': mobile,
+        'photoURL': photoURL,
+        'address': address,
+      };
 }

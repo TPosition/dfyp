@@ -10,12 +10,11 @@ class FirebaseStorageRepository implements StorageRepository {
   Reference ref = FirebaseStorage.instance.ref();
 
   @override
-  Future<void> addImage(Storage storage) async {
+  Future<void> addImage(final String path) async {
     final _picker = ImagePicker();
     var _image = await _picker.getImage(source: ImageSource.gallery);
 
-    TaskSnapshot addImg =
-        await ref.child(storage.path).putFile(File(_image!.path));
+    TaskSnapshot addImg = await ref.child(path).putFile(File(_image!.path));
     if (addImg.state == TaskState.success) {
       print("added to Firebase Storage");
     }
@@ -23,7 +22,6 @@ class FirebaseStorageRepository implements StorageRepository {
   }
 
   @override
-  Future<String> getImageURL(Storage storage) {
-    return ref.child(storage.path).getDownloadURL();
-  }
+  Future<String> getImageURL(final String path) async =>
+      ref.child(path).getDownloadURL();
 }
