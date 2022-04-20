@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ispkp/application/view/view.dart';
+import 'package:ispkp/licenses/bloc/licenses_bloc.dart';
+import 'package:ispkp/renewal/view/view.dart';
 import '/app/app.dart';
 import '/common/widgets/avatar.dart';
 import '/current_user/bloc/current_user_bloc.dart';
@@ -99,32 +102,25 @@ class HomePage extends StatelessWidget {
           Expanded(
             child: Column(
               children: [
-                BlocBuilder<UsersBloc, UsersState>(
-                  builder: (final context, final state) {
-                    if (state is UsersLoaded) {
-                      final users = state.users;
-                      return ButtonTheme(
-                        height: 90,
-                        minWidth: 90,
-                        child: RaisedButton(
-                          onPressed: () {},
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          color: Colors.white,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                          child:
-                              const FaIcon(FontAwesomeIcons.envelopeOpenText),
-                        ),
-                      );
-                    }
-                    return const CircularProgressIndicator();
-                  },
+                ButtonTheme(
+                  height: 90,
+                  minWidth: 90,
+                  child: RaisedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(ApplicationPage.route());
+                    },
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    color: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    child: const FaIcon(FontAwesomeIcons.envelopeOpenText),
+                  ),
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 10),
                   child: Text(
-                    "License Application",
+                    "Application",
                     style: GoogleFonts.roboto(
                       textStyle: Theme.of(context).textTheme.headline4,
                       fontSize: 16,
@@ -144,7 +140,7 @@ class HomePage extends StatelessWidget {
                   minWidth: 90,
                   child: RaisedButton(
                     onPressed: () {
-                      // Navigator.of(context).push(SelectAccountPage.route());
+                      Navigator.of(context).push(RenewalPage.route());
                     },
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     color: Colors.white,
@@ -157,7 +153,7 @@ class HomePage extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.only(top: 10),
                   child: Text(
-                    "License Renewal",
+                    "Renewal",
                     style: GoogleFonts.roboto(
                       textStyle: Theme.of(context).textTheme.headline4,
                       fontSize: 16,
@@ -178,6 +174,7 @@ class HomePage extends StatelessWidget {
                   child: RaisedButton(
                     onPressed: () {
                       // Navigator.of(context).push(SelectAccountPage.route());
+                      Navigator.of(context).push(ApplicationPage.route());
                     },
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     color: Colors.white,
@@ -190,7 +187,7 @@ class HomePage extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.only(top: 10),
                   child: Text(
-                    "Application Status",
+                    "Status",
                     style: GoogleFonts.roboto(
                       textStyle: Theme.of(context).textTheme.headline4,
                       fontSize: 16,

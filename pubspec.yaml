@@ -48,6 +48,8 @@ dependencies:
     path: packages/users_repository
   storage_repository:
     path: packages/storage_repository
+  licenses_repository:
+    path: packages/licenses_repository
   razorpay_flutter: ^1.2.3
   cupertino_icons: ^1.0.2
 

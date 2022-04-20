@@ -1,0 +1,104 @@
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:formz/formz.dart';
+import 'package:licenses_repository/licenses_repository.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+
+part 'application_state.dart';
+
+class ApplicationCubit extends Cubit<ApplicationState> {
+  ApplicationCubit(this._licensesRepository, this._razorpay)
+      : super(const ApplicationState());
+
+  final FirebaseLicensesRepository _licensesRepository;
+  final Razorpay _razorpay;
+
+  void init() {
+    _razorpay
+      ..on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess)
+      ..on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError)
+      ..on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  void typeChanged(final String value) {
+    emit(
+      state.copyWith(
+        type: value,
+      ),
+    );
+  }
+
+  void lclassChanged(final String value) {
+    emit(
+      state.copyWith(
+        lclass: value,
+      ),
+    );
+  }
+
+  void periodChanged(final int value) {
+    emit(
+      state.copyWith(
+        period: value,
+      ),
+    );
+  }
+
+  void departmentChanged(final String value) {
+    emit(
+      state.copyWith(
+        department: value,
+      ),
+    );
+  }
+
+  Future<void> applicationFormSubmitted(
+    final String uid,
+    final String email,
+    final String displayName,
+    final String mobile,
+  ) async {
+    try {
+      final options = {
+        'key': 'rzp_test_HrKYY6mdiMRJLt',
+        'amount': (double.parse(state.amount.toString()) * 100.roundToDouble())
+            .toString(),
+        'name': displayName,
+        'description': 'Top up wallet',
+        'prefill': {'contact': mobile, 'email': email},
+        'external': {
+          'wallets': [''],
+        },
+        'currency': 'MYR'
+      };
+
+      _razorpay.open(options);
+    } on Exception catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  void _handlePaymentSuccess(final PaymentSuccessResponse response) {
+    emit(
+      state.copyWith(
+        status: FormzStatus.submissionSuccess,
+      ),
+    );
+  }
+
+  void _handlePaymentError(final PaymentFailureResponse response) {
+    emit(
+      state.copyWith(
+        status: FormzStatus.submissionFailure,
+      ),
+    );
+  }
+
+  void _handleExternalWallet(final ExternalWalletResponse response) {
+    emit(
+      state.copyWith(
+        status: FormzStatus.submissionFailure,
+      ),
+    );
+  }
+}
