@@ -64,8 +64,6 @@ class HistoryCubit extends Cubit<HistoryState> {
   }
 
   void datePicked(final DateTime picked) {
-    print(picked);
-
     final List<Transaction?> filtered =
         state.transactionsList.map((final transaction) {
       if (transaction.timestamp.year == picked.year &&

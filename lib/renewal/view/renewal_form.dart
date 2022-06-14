@@ -24,6 +24,9 @@ class RenewalForm extends StatelessWidget {
     final licensesList = context.select(
       (final RenewalCubit bloc) => bloc.state.licensesList,
     );
+    final selectedLicense = context.select(
+      (final RenewalCubit bloc) => bloc.state.lid,
+    );
 
     final periodList = [1, 2, 3, 4, 5];
 
@@ -32,16 +35,22 @@ class RenewalForm extends StatelessWidget {
     return BlocListener<RenewalCubit, RenewalState>(
       listener: (final context, final state) {
         if (state.status.isSubmissionSuccess) {
-          context.read<TransactionsBloc>().add(
-                AddTransaction(
-                  Transaction(
-                    amount: state.amount.toDouble(),
-                    category: ktopup,
-                    receiverDisplayName: user.displayName,
-                    receiverUID: user.uid,
+          try {
+            context.read<LicensesBloc>().add(UpdateLicense(
+                  License(
+                    uid: user.uid,
+                    type: selectedLicense.type,
+                    lclass: selectedLicense.lclass,
+                    period: selectedLicense.period,
+                    department: selectedLicense.department,
+                    expiry:
+                        DateTime.now().add(Duration(days: state.period * 365)),
+                    status: "pending",
+                    id: selectedLicense.id,
                   ),
-                ),
-              );
+                ));
+          } on Exception {}
+          print("object");
 
           Navigator.of(context).push<void>(SuccessPage.route());
         } else if (state.status.isSubmissionFailure) {
@@ -67,19 +76,20 @@ class RenewalForm extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 20, top: 20),
                           child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(left: 5),
-                                child: Text(
-                                  'Renewal',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    color: Colors.black,
-                                  ),
+                            children: <Widget>[
+                              IconButton(
+                                  icon: const Icon(Icons.arrow_back),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  }),
+                              const Text(
+                                'Renewal',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.black,
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
@@ -136,28 +146,8 @@ class RenewalForm extends StatelessWidget {
                                     color: Colors.black12,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
-                                  child: DropdownButton(
-                                    underline: const SizedBox(),
-                                    isExpanded: true,
-                                    value: context.select(
-                                      (final RenewalCubit bloc) =>
-                                          bloc.state.licensesList[0],
-                                    ),
-                                    items: licensesList
-                                        .map<DropdownMenuItem<License>>(
-                                          (final item) =>
-                                              DropdownMenuItem<License>(
-                                            value: item,
-                                            child: Text(item.id),
-                                          ),
-                                        )
-                                        .toList(),
-                                    onChanged: (final License? value) {
-                                      context
-                                          .read<RenewalCubit>()
-                                          .lidChanged(value!);
-                                    },
-                                  ),
+                                  child: TypeDropdownButton(
+                                      licensesList: licensesList),
                                 ),
                               ],
                             ),
@@ -238,15 +228,14 @@ class RenewalForm extends StatelessWidget {
                             minWidth: double.infinity,
                             height: 60,
                             onPressed: () async {
-                              // await context
-                              //     .read<RenewalCubit>()
-                              //     .renewalFormSubmitted(
-                              //       user.uid,
-                              //       user.email,
-                              //       user.displayName,
-                              //       user.mobile,
-
-                              //     );
+                              await context
+                                  .read<RenewalCubit>()
+                                  .renewalFormSubmitted(
+                                      user.uid,
+                                      user.email,
+                                      user.displayName,
+                                      user.mobile,
+                                      selectedLicense);
                             },
                             color: Colors.yellowAccent,
                             elevation: 0,
@@ -274,4 +263,43 @@ class RenewalForm extends StatelessWidget {
       ),
     );
   }
+}
+
+class TypeDropdownButton extends StatefulWidget {
+  const TypeDropdownButton({
+    final Key? key,
+    required this.licensesList,
+  }) : super(key: key);
+
+  final List<License> licensesList;
+
+  @override
+  State<TypeDropdownButton> createState() => _TypeDropdownButtonState();
+}
+
+class _TypeDropdownButtonState extends State<TypeDropdownButton> {
+  int index = 0;
+
+  @override
+  Widget build(final BuildContext context) => DropdownButton(
+        underline: const SizedBox(),
+        isExpanded: true,
+        value: context.select(
+          (final RenewalCubit bloc) => bloc.state.licensesList[index],
+        ),
+        items: widget.licensesList
+            .map<DropdownMenuItem<License>>(
+              (final item) => DropdownMenuItem<License>(
+                value: item,
+                child: Text(item.id),
+              ),
+            )
+            .toList(),
+        onChanged: (final License? value) {
+          setState(() {
+            if (value != null) index = widget.licensesList.indexOf(value);
+          });
+          context.read<RenewalCubit>().lidChanged(value!);
+        },
+      );
 }

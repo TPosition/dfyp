@@ -115,6 +115,7 @@ class AppView extends StatelessWidget {
     }
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: theme,
       home: FlowBuilder<UserStatus>(
         state: _userStatus,

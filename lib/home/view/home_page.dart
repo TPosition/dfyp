@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ispkp/application/view/view.dart';
 import 'package:ispkp/licenses/bloc/licenses_bloc.dart';
 import 'package:ispkp/renewal/view/view.dart';
+import 'package:ispkp/status/view/status_page.dart';
 import '/app/app.dart';
 import '/common/widgets/avatar.dart';
 import '/current_user/bloc/current_user_bloc.dart';
@@ -173,8 +174,7 @@ class HomePage extends StatelessWidget {
                   minWidth: 90,
                   child: RaisedButton(
                     onPressed: () {
-                      // Navigator.of(context).push(SelectAccountPage.route());
-                      Navigator.of(context).push(ApplicationPage.route());
+                      Navigator.of(context).push(StatusPage.route());
                     },
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     color: Colors.white,

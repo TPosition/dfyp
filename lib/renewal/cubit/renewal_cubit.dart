@@ -62,38 +62,22 @@ class RenewalCubit extends Cubit<RenewalState> {
     final License license,
   ) async {
     try {
-      emit(state.copyWith(status: FormzStatus.submissionInProgress));
+      final options = {
+        'key': 'rzp_test_HrKYY6mdiMRJLt',
+        'amount': (double.parse(state.amount.toString()) * 100.roundToDouble())
+            .toString(),
+        'name': displayName,
+        'description': 'Top up wallet',
+        'prefill': {'contact': mobile, 'email': email},
+        'external': {
+          'wallets': [''],
+        },
+        'currency': 'MYR'
+      };
 
-      try {
-        final options = {
-          'key': 'rzp_test_HrKYY6mdiMRJLt',
-          'amount':
-              (double.parse(state.amount.toString()) * 100.roundToDouble())
-                  .toString(),
-          'name': displayName,
-          'description': 'Top up wallet',
-          'prefill': {'contact': mobile, 'email': email},
-          'external': {
-            'wallets': [''],
-          },
-          'currency': 'MYR'
-        };
-
-        _razorpay.open(options);
-      } on Exception catch (e) {
-        throw Exception(e);
-      }
-
-      if (state.status == FormzStatus.submissionSuccess) {
-        await _licensesRepository.updateLicense(
-          license.copyWith(
-            expiry: DateTime.now().add(Duration(days: state.period * 365)),
-            period: license.period + state.period,
-          ),
-        );
-      }
-    } on Exception {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
+      _razorpay.open(options);
+    } on Exception catch (e) {
+      throw Exception(e);
     }
   }
 

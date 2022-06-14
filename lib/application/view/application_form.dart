@@ -82,19 +82,20 @@ class ApplicationForm extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 20, top: 20),
                           child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(left: 5),
-                                child: Text(
-                                  'Application',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    color: Colors.black,
-                                  ),
+                            children: <Widget>[
+                              IconButton(
+                                  icon: const Icon(Icons.arrow_back),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  }),
+                              const Text(
+                                'Application',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.black,
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
