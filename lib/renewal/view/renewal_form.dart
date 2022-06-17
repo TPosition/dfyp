@@ -50,7 +50,6 @@ class RenewalForm extends StatelessWidget {
                   ),
                 ));
           } on Exception {}
-          print("object");
 
           Navigator.of(context).push<void>(SuccessPage.route());
         } else if (state.status.isSubmissionFailure) {
