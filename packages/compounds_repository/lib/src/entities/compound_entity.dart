@@ -10,13 +10,15 @@ class CompoundEntity extends Equatable {
   final double amount;
   final String reason;
   final String agency;
+  final String plate;
   final DateTime timestamp;
 
   const CompoundEntity(
       {required this.id,
       required this.amount,
-      this.agency = "",
-      this.reason = "",
+      required this.agency,
+      required this.reason,
+      required this.plate,
       required this.timestamp});
 
   Map<String, Object?> toJson() {
@@ -25,16 +27,17 @@ class CompoundEntity extends Equatable {
       'amount': amount,
       'reason': reason,
       'agency': agency,
+      'plate': plate,
       'timestamp': timestamp,
     };
   }
 
   @override
-  List<Object?> get props => [id, amount, agency, reason, timestamp];
+  List<Object?> get props => [id, amount, agency, reason, plate, timestamp];
 
   @override
   String toString() {
-    return 'CompoundEntity { id: $id,amount: $amount,agency: $agency,reason: $reason,timestamp: $timestamp }';
+    return 'CompoundEntity { id: $id,amount: $amount,agency: $agency,reason: $reason, plate: $plate,timestamp: $timestamp }';
   }
 
   static CompoundEntity fromJson(Map<String, Object> json) {
@@ -43,6 +46,7 @@ class CompoundEntity extends Equatable {
       amount: json['amount'] as double,
       agency: json['agency'] as String,
       reason: json['reason'] as String,
+      plate: json['plate'] as String,
       timestamp: (json['timestamp'] as Timestamp).toDate(),
     );
   }
@@ -54,6 +58,7 @@ class CompoundEntity extends Equatable {
       id: data['id'],
       amount: data['amount'],
       agency: data['agency'],
+      plate: data['plate'],
       reason: data['reason'],
       timestamp: (data['timestamp'] as Timestamp).toDate(),
     );
@@ -65,6 +70,7 @@ class CompoundEntity extends Equatable {
       'amount': amount,
       'reason': reason,
       'agency': agency,
+      'plate': plate,
       'timestamp': timestamp,
     };
   }

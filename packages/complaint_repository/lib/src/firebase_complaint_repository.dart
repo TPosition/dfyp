@@ -5,7 +5,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart' as fs;
-import 'package:transactions_repository/complaint_repository.dart';
+import 'package:complaints_repository/complaint_repository.dart';
 import 'entities/entities.dart';
 
 class FirebaseComplaintsRepository implements ComplaintsRepository {

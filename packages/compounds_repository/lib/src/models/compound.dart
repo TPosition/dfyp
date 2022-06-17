@@ -8,6 +8,7 @@ class Compound {
   final double amount;
   final String reason;
   final String agency;
+  final String plate;
   final DateTime timestamp;
 
   Compound(
@@ -15,6 +16,7 @@ class Compound {
       required this.amount,
       required this.reason,
       required this.agency,
+      required this.plate,
       DateTime? timestamp})
       : this.id = id ?? Uuid().v4(),
         this.timestamp = timestamp ?? DateTime.now();
@@ -34,6 +36,7 @@ class Compound {
         amount.hashCode ^
         reason.hashCode ^
         agency.hashCode ^
+        plate.hashCode ^
         timestamp.hashCode;
   }
 
@@ -46,12 +49,13 @@ class Compound {
             amount == other.amount &&
             reason == other.reason &&
             agency == other.agency &&
+            plate == other.plate &&
             timestamp == other.timestamp;
   }
 
   @override
   String toString() {
-    return 'Compound{id: $id,amount: $amount,reason: $reason,agency: $agency,timestamp: $timestamp}';
+    return 'Compound{id: $id,amount: $amount,reason: $reason,agency: $agency,plate: $plate, timestamp: $timestamp}';
   }
 
   CompoundEntity toEntity() {
@@ -60,6 +64,7 @@ class Compound {
         amount: amount,
         reason: reason,
         agency: agency,
+        plate: plate,
         timestamp: timestamp);
   }
 
@@ -69,6 +74,7 @@ class Compound {
       amount: entity.amount,
       reason: entity.reason,
       agency: entity.agency,
+      plate: entity.plate,
       timestamp: entity.timestamp,
     );
   }

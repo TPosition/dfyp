@@ -4,7 +4,7 @@
 
 import 'dart:async';
 
-import 'package:transactions_repository/src/models/complaint.dart';
+import 'package:complaints_repository/complaint_repository.dart';
 
 abstract class ComplaintsRepository {
   Future<void> addNewComplaint(Complaint Complaint);
