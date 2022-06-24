@@ -290,7 +290,7 @@ class _TypeDropdownButtonState extends State<TypeDropdownButton> {
             .map<DropdownMenuItem<License>>(
               (final item) => DropdownMenuItem<License>(
                 value: item,
-                child: Text(item.id),
+                child: Text(item.type + ' - ' + item.id.substring(0, 5)),
               ),
             )
             .toList(),
