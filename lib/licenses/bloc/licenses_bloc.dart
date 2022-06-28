@@ -21,11 +21,12 @@ class LicensesBloc extends Bloc<LicensesEvent, LicensesState> {
   final LicensesRepository _licensesRepository;
 
   Future<void> _onLoadLicenses(
-          final LoadLicenses event, final Emitter<LicensesState> emit) =>
-      emit.onEach<List<License>>(
-        _licensesRepository.licenses(),
-        onData: (final licenses) => add(LicensesUpdated(licenses)),
-      );
+      final LoadLicenses event, final Emitter<LicensesState> emit) {
+    return emit.onEach<List<License>>(
+      _licensesRepository.licenses(),
+      onData: (final licenses) => add(LicensesUpdated(licenses)),
+    );
+  }
 
   void _onAddLicense(
       final AddLicense event, final Emitter<LicensesState> emit) {
