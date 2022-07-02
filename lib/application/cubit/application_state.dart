@@ -3,11 +3,12 @@ part of 'application_cubit.dart';
 class ApplicationState extends Equatable {
   const ApplicationState({
     final this.type = 'LDL',
-    final this.lclass = 'A',
-    final this.period = 1,
+    final this.lclass = 'D',
+    final this.period = 3,
     final this.department = 'APAD',
     final this.status = FormzStatus.pure,
-  }) : amount = period * 60;
+    final this.isCar = true,
+  }) : amount = period * 10;
 
   final String type;
   final String lclass;
@@ -15,6 +16,7 @@ class ApplicationState extends Equatable {
   final String department;
   final FormzStatus status;
   final int amount;
+  final bool isCar;
 
   @override
   List<Object> get props => [
@@ -23,6 +25,7 @@ class ApplicationState extends Equatable {
         period,
         department,
         status,
+        isCar,
       ];
 
   ApplicationState copyWith({
@@ -31,6 +34,7 @@ class ApplicationState extends Equatable {
     final int? period,
     final String? department,
     final FormzStatus? status,
+    final bool? isCar,
   }) =>
       ApplicationState(
         type: type ?? this.type,
@@ -38,5 +42,6 @@ class ApplicationState extends Equatable {
         period: period ?? this.period,
         department: department ?? this.department,
         status: status ?? this.status,
+        isCar: isCar ?? this.isCar,
       );
 }

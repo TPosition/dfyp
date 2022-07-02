@@ -20,6 +20,14 @@ class ApplicationCubit extends Cubit<ApplicationState> {
       ..on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
+  void isCarChanged(final bool value) {
+    emit(
+      state.copyWith(
+        isCar: value,
+      ),
+    );
+  }
+
   void typeChanged(final String value) {
     emit(
       state.copyWith(

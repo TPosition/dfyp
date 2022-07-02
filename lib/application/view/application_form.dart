@@ -14,6 +14,8 @@ import '/info_update/cubit/info_update_cubit.dart';
 import 'package:formz/formz.dart';
 import 'package:storage_repository/storage_repository.dart';
 
+enum CarCategory { car, motor }
+
 class ApplicationForm extends StatelessWidget {
   const ApplicationForm({final Key? key}) : super(key: key);
 
@@ -22,29 +24,66 @@ class ApplicationForm extends StatelessWidget {
     final user =
         context.select((final CurrentUserBloc bloc) => bloc.state.user);
 
+    final selectCategory = context.select(
+      (final ApplicationCubit bloc) => bloc.state.isCar,
+    );
+    final selectType = context.select(
+      (final ApplicationCubit bloc) => bloc.state.type,
+    );
+
     final typeList = ['LDL', 'PDL', 'CDL', 'VL'];
+    final typeListName = [
+      'Learner Driving Licence (LDL)',
+      'Probationary Driving Licence (PDL)',
+      'Competent Driving Licence (CDL)',
+      'Vocational Licence'
+    ];
     final lclassList = ['A', 'A1', 'B', 'B1', 'D'];
     final periodList = [1, 2, 3, 4, 5];
+
+    final carClassList = ['D', 'DA'];
+    final carClassListName = [
+      'Motor Car unladen weight not exceeding 3500 kg',
+      'Motor Car Without Clutch Pedal unladen weight not exceeding 3500 kg'
+    ];
+    final motorClassList = ['B', 'B1', 'B2'];
+    final motorClassListName = [
+      'Motorcycle exceeding 500 cc',
+      'Motorcycle not exceeding 500 cc',
+      'Motorcycle not exceeding 250 cc'
+    ];
+
+    final ldlPeriodList = [3, 6];
+    final pdlPeriodList = [24];
+    final cdlPeriodList = [12, 24, 36, 48, 60];
+
+    final vlTypeList = ['GDL', 'PSV'];
+    final vlClassList = ['B', 'B2', 'E', 'D'];
+    final vlPeriodList = [12];
+
     final departmentList = ['APAD', 'LPKP Sabah', 'LPKP Sarawak'];
 
     final sizeWidth = MediaQuery.of(context).size.width * 3 / 4;
+    CarCategory _isCar = CarCategory.car;
 
     return BlocListener<ApplicationCubit, ApplicationState>(
       listener: (final context, final state) {
         if (state.status.isSubmissionSuccess) {
           try {
-            context.read<LicensesBloc>().add(AddLicense(
-                  License(
-                    uid: user.uid,
-                    type: state.type,
-                    lclass: state.lclass,
-                    period: state.period,
-                    department: state.department,
-                    expiry:
-                        DateTime.now().add(Duration(days: state.period * 365)),
-                    status: "pending",
+            context.read<LicensesBloc>().add(
+                  AddLicense(
+                    License(
+                      uid: user.uid,
+                      type: state.type,
+                      lclass: state.lclass,
+                      period: state.period,
+                      department: state.department,
+                      expiry: DateTime.now()
+                          .add(Duration(days: state.period * 365)),
+                      status: "pending",
+                    ),
                   ),
-                ));
+                );
           } on Exception {}
 
           context.read<TransactionsBloc>().add(
@@ -84,10 +123,11 @@ class ApplicationForm extends StatelessWidget {
                           child: Row(
                             children: <Widget>[
                               IconButton(
-                                  icon: const Icon(Icons.arrow_back),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  }),
+                                icon: const Icon(Icons.arrow_back),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
                               const Text(
                                 'Application',
                                 style: TextStyle(
@@ -109,6 +149,68 @@ class ApplicationForm extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 25,
+                              right: 25,
+                              top: 25,
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: const <Widget>[
+                                    Text(
+                                      'Category',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 25,
+                              top: 2,
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Container(
+                                  width: sizeWidth,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 5,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black12,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: const RadioOption(),
+                                ),
+                              ],
+                            ),
+                          ),
+                          if (selectCategory)
+                            _lclassWidget(
+                              sizeWidth,
+                              context,
+                              carClassList,
+                              carClassListName,
+                            )
+                          else
+                            _lclassWidget(
+                              sizeWidth,
+                              context,
+                              motorClassList,
+                              motorClassListName,
+                            ),
                           Padding(
                             padding: const EdgeInsets.only(
                               left: 25,
@@ -164,11 +266,40 @@ class ApplicationForm extends StatelessWidget {
                                           (final String item) =>
                                               DropdownMenuItem<String>(
                                             value: item,
-                                            child: Text(item),
+                                            child: Text(
+                                              typeListName[
+                                                  typeList.indexOf(item)],
+                                            ),
                                           ),
                                         )
                                         .toList(),
                                     onChanged: (final String? value) {
+                                      if (value == 'LDL') {
+                                        context
+                                            .read<ApplicationCubit>()
+                                            .periodChanged(3);
+                                      }
+                                      if (value == 'LDL') {
+                                        context
+                                            .read<ApplicationCubit>()
+                                            .periodChanged(3);
+                                      }
+                                      if (value == 'PDL') {
+                                        context
+                                            .read<ApplicationCubit>()
+                                            .periodChanged(24);
+                                      }
+                                      if (value == 'CDL') {
+                                        context
+                                            .read<ApplicationCubit>()
+                                            .periodChanged(12);
+                                      }
+                                      if (value == 'VL') {
+                                        context
+                                            .read<ApplicationCubit>()
+                                            .periodChanged(12);
+                                      }
+
                                       context
                                           .read<ApplicationCubit>()
                                           .typeChanged(value!);
@@ -178,144 +309,14 @@ class ApplicationForm extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 25,
-                              right: 25,
-                              top: 25,
-                            ),
-                            child: Row(
-                              children: <Widget>[
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: const <Widget>[
-                                    Text(
-                                      'Class of license',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 25,
-                              top: 2,
-                            ),
-                            child: Row(
-                              children: <Widget>[
-                                Container(
-                                  width: sizeWidth,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 5,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black12,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: DropdownButton(
-                                    underline: const SizedBox(),
-                                    isExpanded: true,
-                                    value: context.select(
-                                      (final ApplicationCubit bloc) =>
-                                          bloc.state.lclass,
-                                    ),
-                                    items: lclassList
-                                        .map<DropdownMenuItem<String>>(
-                                          (final String item) =>
-                                              DropdownMenuItem<String>(
-                                            value: item,
-                                            child: Text(item),
-                                          ),
-                                        )
-                                        .toList(),
-                                    onChanged: (final String? value) {
-                                      context
-                                          .read<ApplicationCubit>()
-                                          .lclassChanged(value!);
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 25,
-                              right: 25,
-                              top: 25,
-                            ),
-                            child: Row(
-                              children: <Widget>[
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: const <Widget>[
-                                    Text(
-                                      'Period (year)',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 25,
-                              top: 2,
-                            ),
-                            child: Row(
-                              children: <Widget>[
-                                Container(
-                                  width: sizeWidth,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 5,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black12,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: DropdownButton(
-                                    underline: const SizedBox(),
-                                    isExpanded: true,
-                                    value: context.select(
-                                      (final ApplicationCubit bloc) =>
-                                          bloc.state.period,
-                                    ),
-                                    items: periodList
-                                        .map<DropdownMenuItem<int>>(
-                                          (final int item) =>
-                                              DropdownMenuItem<int>(
-                                            value: item,
-                                            child: Text(item.toString()),
-                                          ),
-                                        )
-                                        .toList(),
-                                    onChanged: (final int? value) {
-                                      context
-                                          .read<ApplicationCubit>()
-                                          .periodChanged(value!);
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                          if (selectType == 'LDL')
+                            _periodWidget(sizeWidth, context, ldlPeriodList),
+                          if (selectType == 'PDL')
+                            _periodWidget(sizeWidth, context, pdlPeriodList),
+                          if (selectType == 'CDL')
+                            _periodWidget(sizeWidth, context, cdlPeriodList),
+                          if (selectType == 'VL')
+                            _periodWidget(sizeWidth, context, vlPeriodList),
                           Padding(
                             padding: const EdgeInsets.only(
                               left: 25,
@@ -420,10 +421,11 @@ class ApplicationForm extends StatelessWidget {
                               await context
                                   .read<ApplicationCubit>()
                                   .applicationFormSubmitted(
-                                      user.uid,
-                                      user.email,
-                                      user.displayName,
-                                      user.mobile);
+                                    user.uid,
+                                    user.email,
+                                    user.displayName,
+                                    user.mobile,
+                                  );
                             },
                             color: Colors.yellowAccent,
                             elevation: 0,
@@ -451,4 +453,201 @@ class ApplicationForm extends StatelessWidget {
       ),
     );
   }
+
+  Column _periodWidget(final double sizeWidth, final BuildContext context,
+          final List<int> periodList) =>
+      Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 25,
+              right: 25,
+              top: 25,
+            ),
+            child: Row(
+              children: <Widget>[
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const <Widget>[
+                    Text(
+                      'Period (month)',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 25,
+              top: 2,
+            ),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: sizeWidth,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black12,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: DropdownButton(
+                    underline: const SizedBox(),
+                    isExpanded: true,
+                    value: context.select(
+                      (final ApplicationCubit bloc) => bloc.state.period,
+                    ),
+                    items: periodList
+                        .map<DropdownMenuItem<int>>(
+                          (final int item) => DropdownMenuItem<int>(
+                            value: item,
+                            child: Text(item.toString()),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (final int? value) {
+                      context.read<ApplicationCubit>().periodChanged(value!);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+
+  Column _lclassWidget(final double sizeWidth, final BuildContext context,
+          final List<String> lclassList, final List<String> lclassListName) =>
+      Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 25,
+              right: 25,
+              top: 25,
+            ),
+            child: Row(
+              children: <Widget>[
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const <Widget>[
+                    Text(
+                      'Class of license',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 25,
+              top: 2,
+            ),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: sizeWidth,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black12,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: DropdownButton(
+                    itemHeight: 80,
+                    underline: const SizedBox(),
+                    isExpanded: true,
+                    value: context.select(
+                      (final ApplicationCubit bloc) => bloc.state.lclass,
+                    ),
+                    items: lclassList
+                        .map<DropdownMenuItem<String>>(
+                          (final String item) => DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(
+                              '$item - ${lclassListName[lclassList.indexOf(item)]}',
+                            ),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (final String? value) {
+                      context.read<ApplicationCubit>().lclassChanged(value!);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+}
+
+class RadioOption extends StatefulWidget {
+  const RadioOption({final Key? key}) : super(key: key);
+
+  @override
+  State<RadioOption> createState() => _RadioOption();
+}
+
+class _RadioOption extends State<RadioOption> {
+  CarCategory? _isCar = CarCategory.car;
+
+  @override
+  Widget build(final BuildContext context) =>
+      BlocBuilder<ApplicationCubit, ApplicationState>(
+        buildWhen: (final previous, final current) =>
+            previous.isCar != current.isCar,
+        builder: (final context, final state) => Column(
+          children: <Widget>[
+            ListTile(
+              title: const Text('Car'),
+              leading: Radio<CarCategory>(
+                value: CarCategory.car,
+                groupValue: _isCar,
+                onChanged: (final CarCategory? value) {
+                  context.read<ApplicationCubit>().lclassChanged('D');
+                  context.read<ApplicationCubit>().isCarChanged(true);
+                  setState(() {
+                    _isCar = value;
+                  });
+                },
+              ),
+            ),
+            ListTile(
+              title: const Text('Motor'),
+              leading: Radio<CarCategory>(
+                value: CarCategory.motor,
+                groupValue: _isCar,
+                onChanged: (final CarCategory? value) {
+                  context.read<ApplicationCubit>().lclassChanged('B');
+                  context.read<ApplicationCubit>().isCarChanged(false);
+                  setState(() {
+                    _isCar = value;
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
+      );
 }
