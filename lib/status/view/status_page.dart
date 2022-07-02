@@ -58,7 +58,7 @@ class StatusPage extends StatelessWidget {
                                     Navigator.of(context).pop();
                                   }),
                               const Text(
-                                'Renewal',
+                                'Application Status',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20,
@@ -229,6 +229,24 @@ class StatusPage extends StatelessWidget {
                                       fontSize: 14),
                                   textAlign: TextAlign.left,
                                 ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      license.type + ' - ',
+                                      style: GoogleFonts.roboto(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                    Text(
+                                      license.lclass,
+                                      style: GoogleFonts.roboto(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                  ],
+                                ),
                               ]),
                         ),
                       ),
@@ -239,7 +257,7 @@ class StatusPage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Text("pe"),
+                              Text(license.status),
                               const SizedBox(
                                 height: 5,
                               ),
@@ -249,7 +267,7 @@ class StatusPage extends StatelessWidget {
                                 children: <Widget>[
                                   Expanded(
                                     child: Text(
-                                      " ${license.timestamp.day}/${license.timestamp.month}/${license.timestamp.year} ${license.timestamp.hour}:${license.timestamp.minute}",
+                                      "${license.timestamp.day}/${license.timestamp.month}/${license.timestamp.year} - ${license.expiry.day}/${license.expiry.month}/${license.expiry.year}",
                                       textAlign: TextAlign.right,
                                       style: GoogleFonts.roboto(
                                         fontWeight: FontWeight.w500,
