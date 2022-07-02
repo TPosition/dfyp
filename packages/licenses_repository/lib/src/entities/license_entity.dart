@@ -64,7 +64,7 @@ class LicenseEntity extends Equatable {
         lclass: json['lclass'] as String,
         period: json['period'] as int,
         department: json['department'] as String,
-        expiry: (json['timestamp'] as Timestamp).toDate(),
+        expiry: (json['expiry'] as Timestamp).toDate(),
         status: json['status'] as String,
         timestamp: (json['timestamp'] as Timestamp).toDate(),
       );
@@ -79,7 +79,7 @@ class LicenseEntity extends Equatable {
       lclass: data['lclass'],
       period: data['period'],
       department: data['department'],
-      expiry: (data['timestamp'] as Timestamp).toDate(),
+      expiry: (data['expiry'] as Timestamp).toDate(),
       status: data['status'],
       timestamp: (data['timestamp'] as Timestamp).toDate(),
     );
