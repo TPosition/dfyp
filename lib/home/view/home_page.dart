@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ispkp/application/view/view.dart';
 import 'package:ispkp/complaint/view/complaint_page.dart';
 import 'package:ispkp/compound/view/compound_page.dart';
+import 'package:ispkp/faq/view/faq_page.dart';
 import 'package:ispkp/licenses/bloc/licenses_bloc.dart';
 import 'package:ispkp/renewal/view/view.dart';
 import 'package:ispkp/status/view/status_page.dart';
@@ -268,7 +269,7 @@ class HomePage extends StatelessWidget {
                   child: RaisedButton(
                     elevation: 0,
                     onPressed: () {
-                      Navigator.of(context).push(ComplaintPage.route());
+                      Navigator.of(context).push(FaqPage.route());
                     },
                     color: Color.fromRGBO(250, 250, 252, 1),
                     child: Image.asset('assets/icon_qna.png'),
