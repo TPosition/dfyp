@@ -96,7 +96,6 @@ class ComplaintForm extends StatelessWidget {
                                   vertical: 5,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.black12,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: _TitleInput(),
@@ -144,7 +143,6 @@ class ComplaintForm extends StatelessWidget {
                                   vertical: 5,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.black12,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: _CommentInput(),
@@ -218,7 +216,6 @@ class _TitleInput extends StatelessWidget {
                   borderSide: BorderSide(color: Colors.grey[400]!),
                 ),
                 helperText: '',
-                errorText: state.title.isEmpty ? 'invalid title' : null,
               ),
             ),
           ],
@@ -245,7 +242,8 @@ class _CommentInput extends StatelessWidget {
               onChanged: (final comment) =>
                   context.read<ComplaintCubit>().commentChanged(comment),
               decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey[400]!),
                 ),
@@ -253,7 +251,6 @@ class _CommentInput extends StatelessWidget {
                   borderSide: BorderSide(color: Colors.grey[400]!),
                 ),
                 helperText: '',
-                errorText: state.comment.isEmpty ? 'invalid comment' : null,
               ),
             ),
           ],
