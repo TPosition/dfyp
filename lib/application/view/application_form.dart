@@ -90,7 +90,7 @@ class ApplicationForm extends StatelessWidget {
                 AddTransaction(
                   Transaction(
                     amount: state.amount.toDouble(),
-                    category: ktopup,
+                    category: kapplication,
                     receiverDisplayName: user.displayName,
                     receiverUID: user.uid,
                   ),

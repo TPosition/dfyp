@@ -52,6 +52,17 @@ class RenewalForm extends StatelessWidget {
                     id: selectedLicense.id,
                   ),
                 ));
+
+            context.read<TransactionsBloc>().add(
+                  AddTransaction(
+                    Transaction(
+                      amount: state.amount.toDouble(),
+                      category: krenewal,
+                      receiverDisplayName: user.displayName,
+                      receiverUID: user.uid,
+                    ),
+                  ),
+                );
           } on Exception {}
 
           Navigator.of(context).push<void>(SuccessPage.route());

@@ -194,9 +194,9 @@ class HistoryPage extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(right: 12),
                         child: Image.asset(
-                          transaction.category == ktopup
+                          transaction.category == kapplication
                               ? 'assets/ico_pay_phone.png'
-                              : transaction.receiverUID == user.uid
+                              : transaction.category == krenewal
                                   ? 'assets/ico_receive_money.png'
                                   : 'assets/ico_send_money.png',
                           height: 30,
