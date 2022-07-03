@@ -33,9 +33,12 @@ class HistoryPage extends StatelessWidget {
       builder: (final context, final state) {
         if (state is TransactionsLoaded) {
           return BlocProvider(
-            create: (final context) =>
-                HistoryCubit(transactions: state.transactions, uid: user.uid)
-                  ..init(),
+            create: (final context) => HistoryCubit(
+                transactions: state.transactions
+                    .where((element) => element.receiverUID == user.uid)
+                    .toList(),
+                uid: user.uid)
+              ..init(),
             child: Scaffold(
               backgroundColor: const Color(0xFFF4F4F4),
               body: Column(
@@ -97,7 +100,7 @@ class HistoryPage extends StatelessWidget {
                                       DropdownMenuItem(
                                         value: 2,
                                         child: Text(
-                                          "Transfer",
+                                          "Application",
                                           style: GoogleFonts.roboto(
                                               fontSize: 18,
                                               fontWeight: FontWeight.w500),
@@ -106,7 +109,7 @@ class HistoryPage extends StatelessWidget {
                                       DropdownMenuItem(
                                           value: 3,
                                           child: Text(
-                                            "Received",
+                                            "Renewal",
                                             style: GoogleFonts.roboto(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w500),
@@ -114,7 +117,7 @@ class HistoryPage extends StatelessWidget {
                                       DropdownMenuItem(
                                           value: 4,
                                           child: Text(
-                                            "Top up",
+                                            "Compound",
                                             style: GoogleFonts.roboto(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w500),
