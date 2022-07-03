@@ -44,7 +44,6 @@ class StatusPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Container(
-                    color: Colors.white,
                     child: Column(
                       children: <Widget>[
                         Padding(
@@ -69,105 +68,6 @@ class StatusPage extends StatelessWidget {
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 10),
-                      child: Row(children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 1,
-                                  blurRadius: 4,
-                                  offset: const Offset(0, 1),
-                                ),
-                              ],
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 5),
-                            child: DropdownButtonHideUnderline(
-                              child: ButtonTheme(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 5),
-                                child: BlocBuilder<StatusCubit, StatusState>(
-                                  builder: (final context, final state) =>
-                                      DropdownButton(
-                                    hint: const Text('Category'),
-                                    icon: const Icon(Icons.arrow_downward),
-                                    elevation: 16,
-                                    value: _dropdownValue,
-                                    items: [
-                                      DropdownMenuItem(
-                                        value: 1,
-                                        child: Text(
-                                          "All",
-                                          style: GoogleFonts.roboto(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ),
-                                      DropdownMenuItem(
-                                        value: 2,
-                                        child: Text(
-                                          "Transfer",
-                                          style: GoogleFonts.roboto(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ),
-                                      DropdownMenuItem(
-                                          value: 3,
-                                          child: Text(
-                                            "Received",
-                                            style: GoogleFonts.roboto(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w500),
-                                          )),
-                                      DropdownMenuItem(
-                                          value: 4,
-                                          child: Text(
-                                            "Top up",
-                                            style: GoogleFonts.roboto(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w500),
-                                          )),
-                                      DropdownMenuItem(
-                                        value: 5,
-                                        child: Text(
-                                          "Date",
-                                          style: GoogleFonts.roboto(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ),
-                                    ],
-                                    onChanged: (final int? value) {
-                                      if (value != null) {
-                                        context
-                                            .read<StatusCubit>()
-                                            .searchChanged(value);
-                                      }
-
-                                      if (value == 5) {
-                                        _selectDate(context);
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ]),
                     ),
                   ),
                   BlocBuilder<StatusCubit, StatusState>(
