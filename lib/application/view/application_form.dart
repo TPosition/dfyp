@@ -53,7 +53,7 @@ class ApplicationForm extends StatelessWidget {
       'Motorcycle not exceeding 250 cc'
     ];
 
-    final ldlPeriodList = [3, 6];
+    final ldlPeriodList = [3, 6, 12, 24];
     final pdlPeriodList = [24];
     final cdlPeriodList = [12, 24, 36, 48, 60];
 

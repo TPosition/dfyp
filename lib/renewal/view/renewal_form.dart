@@ -29,6 +29,9 @@ class RenewalForm extends StatelessWidget {
     );
 
     final periodList = [1, 2, 3, 4, 5];
+    final ldlPeriodList = [3, 6, 12, 24];
+    final vlPeriodList = [12];
+    final cdlPeriodList = [12, 24, 36, 48, 60];
 
     final sizeWidth = MediaQuery.of(context).size.width * 3 / 4;
 
@@ -44,7 +47,7 @@ class RenewalForm extends StatelessWidget {
                     period: selectedLicense.period,
                     department: selectedLicense.department,
                     expiry:
-                        DateTime.now().add(Duration(days: state.period * 365)),
+                        DateTime.now().add(Duration(days: state.period * 30)),
                     status: "pending",
                     id: selectedLicense.id,
                   ),
@@ -151,105 +154,45 @@ class RenewalForm extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 25,
-                              right: 25,
-                              top: 25,
-                            ),
-                            child: Row(
-                              children: <Widget>[
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: const <Widget>[
-                                    Text(
-                                      'Period (year)',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
+                          if (selectedLicense.type == 'LDL')
+                            _periodWidget(sizeWidth, context, ldlPeriodList),
+                          if (selectedLicense.type == 'VL')
+                            _periodWidget(sizeWidth, context, vlPeriodList),
+                          if (selectedLicense.type == 'CDL')
+                            _periodWidget(sizeWidth, context, cdlPeriodList),
                           const SizedBox(
                             height: 20,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 25,
-                              top: 2,
-                            ),
-                            child: Row(
-                              children: <Widget>[
-                                Container(
-                                  width: sizeWidth,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 5,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black12,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: DropdownButton(
-                                    underline: const SizedBox(),
-                                    isExpanded: true,
-                                    value: context.select(
-                                      (final RenewalCubit bloc) =>
-                                          bloc.state.period,
-                                    ),
-                                    items: periodList
-                                        .map<DropdownMenuItem<int>>(
-                                          (final int item) =>
-                                              DropdownMenuItem<int>(
-                                            value: item,
-                                            child: Text(item.toString()),
-                                          ),
-                                        )
-                                        .toList(),
-                                    onChanged: (final int? value) {
-                                      context
-                                          .read<RenewalCubit>()
-                                          .periodChanged(value!);
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          MaterialButton(
-                            minWidth: double.infinity,
-                            height: 60,
-                            onPressed: () async {
-                              await context
-                                  .read<RenewalCubit>()
-                                  .renewalFormSubmitted(
-                                      user.uid,
-                                      user.email,
-                                      user.displayName,
-                                      user.mobile,
-                                      selectedLicense);
-                            },
-                            color: Colors.yellowAccent,
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            child: Text(
-                              "Pay ${context.select((final RenewalCubit bloc) => bloc.state.amount)}",
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 18,
-                                color: Colors.black,
+                          if (selectedLicense.type == 'LDL' ||
+                              selectedLicense.type == 'VL' ||
+                              selectedLicense.type == 'CDL')
+                            MaterialButton(
+                              minWidth: double.infinity,
+                              height: 60,
+                              onPressed: () async {
+                                await context
+                                    .read<RenewalCubit>()
+                                    .renewalFormSubmitted(
+                                        user.uid,
+                                        user.email,
+                                        user.displayName,
+                                        user.mobile,
+                                        selectedLicense);
+                              },
+                              color: Colors.yellowAccent,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50),
                               ),
-                            ),
-                          )
+                              child: Text(
+                                "Pay ${context.select((final RenewalCubit bloc) => bloc.state.amount)}",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            )
                         ],
                       ),
                     ),
@@ -262,6 +205,78 @@ class RenewalForm extends StatelessWidget {
       ),
     );
   }
+
+  Column _periodWidget(final double sizeWidth, final BuildContext context,
+          final List<int> periodList) =>
+      Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 25,
+              right: 25,
+              top: 25,
+            ),
+            child: Row(
+              children: <Widget>[
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const <Widget>[
+                    Text(
+                      'Period (month)',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 25,
+              top: 2,
+            ),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: sizeWidth,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black12,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: DropdownButton(
+                    underline: const SizedBox(),
+                    isExpanded: true,
+                    value: context.select(
+                      (final RenewalCubit bloc) => bloc.state.period,
+                    ),
+                    items: periodList
+                        .map<DropdownMenuItem<int>>(
+                          (final int item) => DropdownMenuItem<int>(
+                            value: item,
+                            child: Text(item.toString()),
+                          ),
+                        )
+                        .toList(),
+                    onChanged: (final int? value) {
+                      context.read<RenewalCubit>().periodChanged(value!);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
 }
 
 class TypeDropdownButton extends StatefulWidget {
@@ -280,25 +295,31 @@ class _TypeDropdownButtonState extends State<TypeDropdownButton> {
   int index = 0;
 
   @override
-  Widget build(final BuildContext context) => DropdownButton(
-        underline: const SizedBox(),
-        isExpanded: true,
-        value: context.select(
-          (final RenewalCubit bloc) => bloc.state.licensesList[index],
-        ),
-        items: widget.licensesList
-            .map<DropdownMenuItem<License>>(
-              (final item) => DropdownMenuItem<License>(
-                value: item,
-                child: Text(item.type + ' - ' + item.id.substring(0, 5)),
-              ),
-            )
-            .toList(),
-        onChanged: (final License? value) {
-          setState(() {
-            if (value != null) index = widget.licensesList.indexOf(value);
-          });
-          context.read<RenewalCubit>().lidChanged(value!);
-        },
-      );
+  Widget build(final BuildContext context) {
+    final user =
+        context.select((final CurrentUserBloc bloc) => bloc.state.user);
+    return DropdownButton(
+      underline: const SizedBox(),
+      isExpanded: true,
+      value: context.select(
+        (final RenewalCubit bloc) => bloc.state.licensesList[index],
+      ),
+      items: widget.licensesList
+          .where((final element) => element.uid == user.uid)
+          .map<DropdownMenuItem<License>>(
+            (final item) => DropdownMenuItem<License>(
+              value: item,
+              child: Text(
+                  '${item.type}: ${item.timestamp.day}/${item.timestamp.month}/${item.timestamp.year} - ${item.expiry.day}/${item.expiry.month}/${item.expiry.year}'),
+            ),
+          )
+          .toList(),
+      onChanged: (final License? value) {
+        context.read<RenewalCubit>().lidChanged(value!);
+        setState(() {
+          if (value != null) index = widget.licensesList.indexOf(value);
+        });
+      },
+    );
+  }
 }

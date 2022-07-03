@@ -3,10 +3,10 @@ part of 'renewal_cubit.dart';
 class RenewalState extends Equatable {
   const RenewalState({
     required final this.lid,
-    final this.period = 1,
+    final this.period = 12,
     final this.status = FormzStatus.pure,
     final this.licensesList = const [],
-  }) : amount = period * 60;
+  }) : amount = period * 30;
 
   final License lid;
   final FormzStatus status;
