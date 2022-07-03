@@ -78,8 +78,8 @@ class ApplicationForm extends StatelessWidget {
                       lclass: state.lclass,
                       period: state.period,
                       department: state.department,
-                      expiry: DateTime.now()
-                          .add(Duration(days: state.period * 365)),
+                      expiry:
+                          DateTime.now().add(Duration(days: state.period * 30)),
                       status: "pending",
                     ),
                   ),

@@ -147,6 +147,13 @@ class StatusPage extends StatelessWidget {
                                     ),
                                   ],
                                 ),
+                                Text(
+                                  license.department,
+                                  style: GoogleFonts.roboto(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14),
+                                  textAlign: TextAlign.left,
+                                ),
                               ]),
                         ),
                       ),
