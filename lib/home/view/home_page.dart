@@ -73,7 +73,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
           Text(
-            user.displayName,
+            "${user.fname} ${user.lname}",
             style: GoogleFonts.roboto(
               fontSize: 18,
               fontWeight: FontWeight.bold,

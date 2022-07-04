@@ -45,6 +45,16 @@ class FirebaseUsersRepository implements UsersRepository {
           mobile: "",
           photoURL: "",
           address: "",
+          gender: '',
+          fname: '',
+          lname: '',
+          nationality: '',
+          passport: '',
+          country: '',
+          postCode: '',
+          city: '',
+          province: '',
+          marital: '',
         );
       });
 }

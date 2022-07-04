@@ -14,49 +14,25 @@ class InfoUpdateCubit extends Cubit<InfoUpdateState> {
   final _storage = FirebaseStorageRepository();
 
   void displayNameChanged(final String value) {
-    final displayName = StringInput.dirty(value);
     emit(
       state.copyWith(
-        displayName: displayName,
-        mobile: state.mobile,
-        address: state.address,
-        status: Formz.validate([
-          displayName,
-          state.mobile,
-          state.address,
-        ]),
+        displayName: value,
       ),
     );
   }
 
   void mobileChanged(final String value) {
-    final mobile = StringInput.dirty(value);
     emit(
       state.copyWith(
-        displayName: state.displayName,
-        mobile: mobile,
-        address: state.address,
-        status: Formz.validate([
-          state.displayName,
-          mobile,
-          state.address,
-        ]),
+        mobile: value,
       ),
     );
   }
 
   void addressChanged(final String value) {
-    final address = StringInput.dirty(value);
     emit(
       state.copyWith(
-        displayName: state.displayName,
-        mobile: state.mobile,
-        address: address,
-        status: Formz.validate([
-          state.displayName,
-          state.mobile,
-          address,
-        ]),
+        address: value,
       ),
     );
   }
@@ -64,22 +40,75 @@ class InfoUpdateCubit extends Cubit<InfoUpdateState> {
   void imageChanged(final bool isChanged) {
     emit(
       state.copyWith(
-        displayName: state.displayName,
-        mobile: state.mobile,
-        status: Formz.validate([
-          state.displayName,
-          state.mobile,
-        ]),
         hasImage: isChanged,
       ),
     );
+  }
+
+  void genderChanged(final String value) {
+    emit(state.copyWith(
+      gender: value,
+    ));
+  }
+
+  void fnameChanged(final String value) {
+    emit(state.copyWith(
+      fname: value,
+    ));
+  }
+
+  void lnameChanged(final String value) {
+    emit(state.copyWith(
+      lname: value,
+    ));
+  }
+
+  void nationalityChanged(final String value) {
+    emit(state.copyWith(
+      nationality: value,
+    ));
+  }
+
+  void passportChanged(final String value) {
+    emit(state.copyWith(
+      passport: value,
+    ));
+  }
+
+  void countryChanged(final String value) {
+    emit(state.copyWith(
+      country: value,
+    ));
+  }
+
+  void postCodeChanged(final String value) {
+    emit(state.copyWith(
+      postCode: value,
+    ));
+  }
+
+  void cityChanged(final String value) {
+    emit(state.copyWith(
+      city: value,
+    ));
+  }
+
+  void provinceChanged(final String value) {
+    emit(state.copyWith(
+      province: value,
+    ));
+  }
+
+  void maritalChanged(final String value) {
+    emit(state.copyWith(
+      marital: value,
+    ));
   }
 
   Future<void> infoUpdateFormSubmitted(
     final String uid,
     final String email,
   ) async {
-    if (!state.status.isValidated) return;
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
       final String photoURL = await _storage.getImageURL('$uid/avatar.png');
@@ -88,11 +117,21 @@ class InfoUpdateCubit extends Cubit<InfoUpdateState> {
         User(
           uid: uid,
           balance: 0,
-          displayName: state.displayName.value,
+          displayName: state.displayName,
           email: email,
-          mobile: state.mobile.value,
+          mobile: state.mobile,
           photoURL: photoURL,
-          address: state.address.value,
+          address: state.address,
+          gender: state.gender,
+          fname: state.fname,
+          lname: state.lname,
+          nationality: state.nationality,
+          passport: state.passport,
+          country: state.country,
+          postCode: state.postCode,
+          city: state.city,
+          province: state.province,
+          marital: state.marital,
         ),
       );
       emit(state.copyWith(status: FormzStatus.submissionSuccess));

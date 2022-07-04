@@ -13,6 +13,16 @@ class CurrentUserState extends Equatable {
       mobile: "",
       photoURL: "",
       address: "",
+      gender: "",
+      fname: "",
+      lname: "",
+      nationality: "",
+      passport: "",
+      country: "",
+      postCode: "",
+      city: "",
+      province: "",
+      marital: "",
     ),
   });
 

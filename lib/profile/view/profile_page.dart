@@ -64,14 +64,26 @@ class ProfilePage extends StatelessWidget {
                                   height: 15,
                                 ),
                                 _InfoUserMobile(user: user),
-                                const SizedBox(
-                                  height: 20,
-                                ),
                                 const _InfoAddress(),
                                 const SizedBox(
                                   height: 15,
                                 ),
                                 _InfoUserAddress(user: user),
+                                const _InfoPassport(),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                _InfoUserPassport(user: user),
+                                const _InfoNationality(),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                _InfoUserNationality(user: user),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                const _InfoMarital(),
+                                _InfoUserMarital(user: user),
                               ],
                             ),
                           ),
@@ -207,7 +219,7 @@ class _InfoUserName extends StatelessWidget {
         children: <Widget>[
           Flexible(
             child: Text(
-              user.displayName,
+              "${user.fname} ${user.lname}",
               style: GoogleFonts.roboto(
                 fontSize: 18,
               ),
@@ -256,7 +268,11 @@ class _InfoUserAddress extends StatelessWidget {
         children: <Widget>[
           Flexible(
             child: Text(
-              user.address,
+              '''
+${user.address}
+${user.postCode} ${user.city}
+ ${user.province}
+              ''',
               style: GoogleFonts.roboto(
                 fontSize: 18,
               ),
@@ -326,6 +342,165 @@ class _ProfileAvatar extends StatelessWidget {
           ],
         ),
       );
+}
+
+class _InfoUserPassport extends StatelessWidget {
+  const _InfoUserPassport({
+    required final this.user,
+    final Key? key,
+  }) : super(key: key);
+
+  final User user;
+
+  @override
+  Widget build(final BuildContext context) => Padding(
+      padding: const EdgeInsets.only(
+        left: 25,
+        right: 25,
+        top: 2,
+      ),
+      child: Row(
+        children: <Widget>[
+          Flexible(
+            child: Text(
+              user.passport,
+              style: GoogleFonts.roboto(
+                fontSize: 18,
+              ),
+            ),
+          ),
+        ],
+      ));
+}
+
+class _InfoPassport extends StatelessWidget {
+  const _InfoPassport({
+    final Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(final BuildContext context) => Padding(
+      padding: const EdgeInsets.only(left: 25, right: 25, top: 25),
+      child: Row(
+        children: <Widget>[
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                'Passport',
+                style: GoogleFonts.roboto(
+                    fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ],
+      ));
+}
+
+class _InfoUserNationality extends StatelessWidget {
+  const _InfoUserNationality({
+    required final this.user,
+    final Key? key,
+  }) : super(key: key);
+
+  final User user;
+
+  @override
+  Widget build(final BuildContext context) => Padding(
+      padding: const EdgeInsets.only(
+        left: 25,
+        right: 25,
+        top: 2,
+      ),
+      child: Row(
+        children: <Widget>[
+          Flexible(
+            child: Text(
+              user.nationality,
+              style: GoogleFonts.roboto(
+                fontSize: 18,
+              ),
+            ),
+          ),
+        ],
+      ));
+}
+
+class _InfoNationality extends StatelessWidget {
+  const _InfoNationality({
+    final Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(final BuildContext context) => Padding(
+      padding: const EdgeInsets.only(left: 25, right: 25, top: 25),
+      child: Row(
+        children: <Widget>[
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                'Nationality',
+                style: GoogleFonts.roboto(
+                    fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ],
+      ));
+}
+
+class _InfoUserMarital extends StatelessWidget {
+  const _InfoUserMarital({
+    required final this.user,
+    final Key? key,
+  }) : super(key: key);
+
+  final User user;
+
+  @override
+  Widget build(final BuildContext context) => Padding(
+      padding: const EdgeInsets.only(
+        left: 25,
+        right: 25,
+        top: 2,
+      ),
+      child: Row(
+        children: <Widget>[
+          Flexible(
+            child: Text(
+              user.marital,
+              style: GoogleFonts.roboto(
+                fontSize: 18,
+              ),
+            ),
+          ),
+        ],
+      ));
+}
+
+class _InfoMarital extends StatelessWidget {
+  const _InfoMarital({
+    final Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(final BuildContext context) => Padding(
+      padding: const EdgeInsets.only(left: 25, right: 25, top: 25),
+      child: Row(
+        children: <Widget>[
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                'Marital',
+                style: GoogleFonts.roboto(
+                    fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ],
+      ));
 }
 
 class _AppBar extends StatelessWidget {
