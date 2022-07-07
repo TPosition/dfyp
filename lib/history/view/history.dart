@@ -232,7 +232,7 @@ class HistoryPage extends StatelessWidget {
                             children: <Widget>[
                               Text(
                                 transaction.receiverUID == user.uid
-                                    ? ' + RM ${transaction.amount}'
+                                    ? '  RM ${transaction.amount}'
                                     : ' - RM ${transaction.amount}',
                                 style: GoogleFonts.roboto(
                                     color: transaction.receiverUID == user.uid
