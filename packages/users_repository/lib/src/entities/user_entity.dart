@@ -23,6 +23,9 @@ class UserEntity extends Equatable {
   final String city;
   final String province;
   final String marital;
+  final String registrationNumber;
+  final String registrationType;
+  final String companyType;
 
   const UserEntity({
     required this.uid,
@@ -42,6 +45,9 @@ class UserEntity extends Equatable {
     required this.city,
     required this.province,
     required this.marital,
+    required this.registrationNumber,
+    required this.registrationType,
+    required this.companyType,
   });
 
   Map<String, Object?> toJson() => {
@@ -62,6 +68,9 @@ class UserEntity extends Equatable {
         'city': city,
         'province': province,
         'marital': marital,
+        'registrationNumber': registrationNumber,
+        'registrationType': registrationType,
+        'companyType': companyType,
       };
 
   @override
@@ -83,6 +92,9 @@ class UserEntity extends Equatable {
         city,
         province,
         marital,
+        registrationNumber,
+        registrationType,
+        companyType,
       ];
 
   @override
@@ -107,6 +119,9 @@ class UserEntity extends Equatable {
         city: json['city'] as String,
         province: json['province'] as String,
         marital: json['marital'] as String,
+        registrationNumber: json['registrationNumber'] as String,
+        registrationType: json['registrationType'] as String,
+        companyType: json['companyType'] as String,
       );
 
   static UserEntity fromSnapshot(final DocumentSnapshot snap) {
@@ -130,6 +145,9 @@ class UserEntity extends Equatable {
       city: data['city'],
       province: data['province'],
       marital: data['marital'],
+      registrationNumber: data['registrationNumber'],
+      registrationType: data['registrationType'],
+      companyType: data['companyType'],
     );
   }
 
@@ -151,5 +169,8 @@ class UserEntity extends Equatable {
         'city': city,
         'province': province,
         'marital': marital,
+        'registrationNumber': registrationNumber,
+        'registrationType': registrationType,
+        'companyType': companyType,
       };
 }

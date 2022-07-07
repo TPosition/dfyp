@@ -23,6 +23,9 @@ class CurrentUserState extends Equatable {
       city: "",
       province: "",
       marital: "",
+      registrationNumber: "",
+      registrationType: "",
+      companyType: "",
     ),
   });
 

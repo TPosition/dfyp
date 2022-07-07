@@ -5,10 +5,11 @@ import 'package:formz/formz.dart';
 import 'package:storage_repository/storage_repository.dart';
 import 'package:users_repository/users_repository.dart';
 
-part 'info_update_state.dart';
+part 'info_update_company_state.dart';
 
-class InfoUpdateCubit extends Cubit<InfoUpdateState> {
-  InfoUpdateCubit(this._usersRepository) : super(const InfoUpdateState());
+class InfoUpdateCompanyCubit extends Cubit<InfoUpdateCompanyState> {
+  InfoUpdateCompanyCubit(this._usersRepository)
+      : super(const InfoUpdateCompanyState());
 
   final FirebaseUsersRepository _usersRepository;
   final _storage = FirebaseStorageRepository();
@@ -105,7 +106,25 @@ class InfoUpdateCubit extends Cubit<InfoUpdateState> {
     ));
   }
 
-  Future<void> infoUpdateFormSubmitted(
+  void registrationNumberChanged(final String value) {
+    emit(state.copyWith(
+      registrationNumber: value,
+    ));
+  }
+
+  void registrationTypeChanged(final String value) {
+    emit(state.copyWith(
+      registrationType: value,
+    ));
+  }
+
+  void companyTypeChanged(final String value) {
+    emit(state.copyWith(
+      companyType: value,
+    ));
+  }
+
+  Future<void> infoUpdateCompanyFormSubmitted(
     final String uid,
     final String email,
   ) async {

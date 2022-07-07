@@ -40,6 +40,9 @@ class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
             city: "",
             province: "",
             marital: "",
+            registrationNumber: "",
+            registrationType: "",
+            companyType: "",
           ),
         );
         add(CurrentUserChanged(CurrentUserStatus.incompleted, currentUser));

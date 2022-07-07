@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ispkp/info_update_company/cubit/info_update_company_cubit.dart';
 import '/app/app.dart';
 import '/common/widgets/avatar.dart';
 import '/info_update/cubit/info_update_cubit.dart';
 import 'package:formz/formz.dart';
 import 'package:storage_repository/storage_repository.dart';
 
-class InfoUpdateForm extends StatelessWidget {
-  const InfoUpdateForm({final Key? key}) : super(key: key);
+class InfoUpdateCompanyForm extends StatelessWidget {
+  const InfoUpdateCompanyForm({final Key? key}) : super(key: key);
 
   @override
   Widget build(final BuildContext context) {
@@ -15,7 +16,7 @@ class InfoUpdateForm extends StatelessWidget {
       (final AppBloc bloc) => bloc.state.user,
     );
 
-    return BlocListener<InfoUpdateCubit, InfoUpdateState>(
+    return BlocListener<InfoUpdateCompanyCubit, InfoUpdateCompanyState>(
       listener: (final context, final state) {
         if (state.status.isSubmissionSuccess) {
           Navigator.of(context).pop();
@@ -33,17 +34,17 @@ class InfoUpdateForm extends StatelessWidget {
           color: Colors.white,
           child: ListView(
             children: <Widget>[
-              Row(
-                children: [
-                  IconButton(
-                      icon: const Icon(Icons.arrow_back),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      }),
-                ],
-              ),
               Column(
                 children: <Widget>[
+                  Row(
+                    children: [
+                      IconButton(
+                          icon: const Icon(Icons.arrow_back),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          }),
+                    ],
+                  ),
                   Container(
                     color: Colors.white,
                     child: Column(
@@ -64,6 +65,159 @@ class InfoUpdateForm extends StatelessWidget {
                                   ),
                                 ),
                               )
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 25,
+                            right: 25,
+                            top: 25,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: const <Widget>[
+                                  Text(
+                                    'Company Information',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 25,
+                            right: 25,
+                            top: 25,
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: const <Widget>[
+                                  Text(
+                                    'Registration Number',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 25,
+                            right: 25,
+                            top: 2,
+                          ),
+                          child: Row(
+                            children: const <Widget>[
+                              _registrationNumberInput(),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 25,
+                            right: 25,
+                            top: 25,
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: const <Widget>[
+                                  Text(
+                                    'Registration Type',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 25,
+                            right: 25,
+                            top: 2,
+                          ),
+                          child: Row(
+                            children: const <Widget>[
+                              _registrationTypeInput(),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 25,
+                            right: 25,
+                            top: 25,
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: const <Widget>[
+                                  Text(
+                                    'Company Type',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 25,
+                            right: 25,
+                            top: 2,
+                          ),
+                          child: Row(
+                            children: const <Widget>[
+                              _companyTypeInput(),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 25,
+                            right: 25,
+                            top: 25,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: const <Widget>[
+                                  Text(
+                                    'Personal Information',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         ),
@@ -102,30 +256,6 @@ class InfoUpdateForm extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 25,
-                              right: 25,
-                              top: 25,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: const <Widget>[
-                                    Text(
-                                      'Personal Information',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
                           Padding(
                             padding: const EdgeInsets.only(
                               left: 25,
@@ -554,8 +684,8 @@ class InfoUpdateForm extends StatelessWidget {
                             height: 60,
                             onPressed: () async {
                               await context
-                                  .read<InfoUpdateCubit>()
-                                  .infoUpdateFormSubmitted(
+                                  .read<InfoUpdateCompanyCubit>()
+                                  .infoUpdateCompanyFormSubmitted(
                                     auth.id,
                                     auth.email ?? 'auth email error',
                                   );
@@ -599,7 +729,7 @@ class _avatarInput extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) =>
-      BlocBuilder<InfoUpdateCubit, InfoUpdateState>(
+      BlocBuilder<InfoUpdateCompanyCubit, InfoUpdateCompanyState>(
         buildWhen: (final previous, final current) =>
             previous.hasImage != current.hasImage,
         builder: (final context, final state) => Row(
@@ -659,9 +789,9 @@ class _avatarInput extends StatelessWidget {
                 size: 30,
               ),
               onPressed: () async {
-                context.read<InfoUpdateCubit>().imageChanged(false);
+                context.read<InfoUpdateCompanyCubit>().imageChanged(false);
                 await _storage.addImage('$uid/avatar.png');
-                context.read<InfoUpdateCubit>().imageChanged(true);
+                context.read<InfoUpdateCompanyCubit>().imageChanged(true);
               },
             ),
           ],
@@ -676,14 +806,14 @@ class _MobileInput extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) =>
-      BlocBuilder<InfoUpdateCubit, InfoUpdateState>(
+      BlocBuilder<InfoUpdateCompanyCubit, InfoUpdateCompanyState>(
         buildWhen: (final previous, final current) =>
             previous.mobile != current.mobile,
         builder: (final context, final state) => Flexible(
           child: TextFormField(
-            key: const Key('infoUpdateForm_MobileInput_textField'),
+            key: const Key('infoUpdateCompanyForm_MobileInput_textField'),
             onChanged: (final mobile) =>
-                context.read<InfoUpdateCubit>().mobileChanged(mobile),
+                context.read<InfoUpdateCompanyCubit>().mobileChanged(mobile),
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
               hintText: "Enter Your Phone Number",
@@ -700,14 +830,15 @@ class _DisplayNameInput extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) =>
-      BlocBuilder<InfoUpdateCubit, InfoUpdateState>(
+      BlocBuilder<InfoUpdateCompanyCubit, InfoUpdateCompanyState>(
         buildWhen: (final previous, final current) =>
             previous.displayName != current.displayName,
         builder: (final context, final state) => Flexible(
           child: TextFormField(
-            key: const Key('infoUpdateForm_displayNameInput_textField'),
-            onChanged: (final displayName) =>
-                context.read<InfoUpdateCubit>().displayNameChanged(displayName),
+            key: const Key('infoUpdateCompanyForm_displayNameInput_textField'),
+            onChanged: (final displayName) => context
+                .read<InfoUpdateCompanyCubit>()
+                .displayNameChanged(displayName),
             decoration: const InputDecoration(
               hintText: "Enter Your Name",
             ),
@@ -734,7 +865,7 @@ class _genderInputState extends State<_genderInput> {
       'Female',
       'Other',
     ];
-    return BlocBuilder<InfoUpdateCubit, InfoUpdateState>(
+    return BlocBuilder<InfoUpdateCompanyCubit, InfoUpdateCompanyState>(
         buildWhen: (final previous, current) =>
             previous.gender != current.gender,
         builder: (final context, final state) => Row(
@@ -762,7 +893,9 @@ class _genderInputState extends State<_genderInput> {
                       setState(() {
                         dropdownvalue = newValue!;
                       });
-                      context.read<InfoUpdateCubit>().genderChanged(newValue!);
+                      context
+                          .read<InfoUpdateCompanyCubit>()
+                          .genderChanged(newValue!);
                     },
                   ),
                 ),
@@ -777,20 +910,19 @@ class _fnameInput extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(final BuildContext context) =>
-      BlocBuilder<InfoUpdateCubit, InfoUpdateState>(
-          buildWhen: (final previous, current) =>
-              previous.fname != current.fname,
-          builder: (final context, final state) => Flexible(
-                child: TextFormField(
-                  key: const Key('infoUpdateForm_fnameInput_TextField'),
-                  onChanged: (final fname) =>
-                      context.read<InfoUpdateCubit>().fnameChanged(fname),
-                  decoration: const InputDecoration(
-                    hintText: 'Enter your first name',
-                  ),
-                ),
-              ));
+  Widget build(final BuildContext context) => BlocBuilder<
+          InfoUpdateCompanyCubit, InfoUpdateCompanyState>(
+      buildWhen: (final previous, current) => previous.fname != current.fname,
+      builder: (final context, final state) => Flexible(
+            child: TextFormField(
+              key: const Key('infoUpdateCompanyForm_fnameInput_TextField'),
+              onChanged: (final fname) =>
+                  context.read<InfoUpdateCompanyCubit>().fnameChanged(fname),
+              decoration: const InputDecoration(
+                hintText: 'Enter your first name',
+              ),
+            ),
+          ));
 }
 
 class _lnameInput extends StatelessWidget {
@@ -800,14 +932,14 @@ class _lnameInput extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) =>
-      BlocBuilder<InfoUpdateCubit, InfoUpdateState>(
+      BlocBuilder<InfoUpdateCompanyCubit, InfoUpdateCompanyState>(
           buildWhen: (final previous, current) =>
               previous.lname != current.lname,
           builder: (final context, final state) => Flexible(
                   child: TextFormField(
-                key: const Key('infoUpdateForm_lnameInput_TextField'),
+                key: const Key('infoUpdateCompanyForm_lnameInput_TextField'),
                 onChanged: (final lname) =>
-                    context.read<InfoUpdateCubit>().lnameChanged(lname),
+                    context.read<InfoUpdateCompanyCubit>().lnameChanged(lname),
                 decoration: const InputDecoration(
                   hintText: 'Enter your last name',
                 ),
@@ -831,7 +963,7 @@ class _nationalityInputState extends State<_nationalityInput> {
       'Malaysian',
       'Non-Malaysian',
     ];
-    return BlocBuilder<InfoUpdateCubit, InfoUpdateState>(
+    return BlocBuilder<InfoUpdateCompanyCubit, InfoUpdateCompanyState>(
         buildWhen: (final previous, current) =>
             previous.nationality != current.nationality,
         builder: (final context, final state) => Row(
@@ -860,7 +992,7 @@ class _nationalityInputState extends State<_nationalityInput> {
                         dropdownvalue = newValue!;
                       });
                       context
-                          .read<InfoUpdateCubit>()
+                          .read<InfoUpdateCompanyCubit>()
                           .nationalityChanged(newValue!);
                     },
                   ),
@@ -876,20 +1008,21 @@ class _passportInput extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(final BuildContext context) =>
-      BlocBuilder<InfoUpdateCubit, InfoUpdateState>(
-          buildWhen: (final previous, current) =>
-              previous.passport != current.passport,
-          builder: (final context, final state) => Flexible(
-                child: TextFormField(
-                  key: const Key('infoUpdateForm_passportInput_TextField'),
-                  onChanged: (final passport) =>
-                      context.read<InfoUpdateCubit>().passportChanged(passport),
-                  decoration: const InputDecoration(
-                    hintText: 'Enter your passport',
-                  ),
-                ),
-              ));
+  Widget build(final BuildContext context) => BlocBuilder<
+          InfoUpdateCompanyCubit, InfoUpdateCompanyState>(
+      buildWhen: (final previous, current) =>
+          previous.passport != current.passport,
+      builder: (final context, final state) => Flexible(
+            child: TextFormField(
+              key: const Key('infoUpdateCompanyForm_passportInput_TextField'),
+              onChanged: (final passport) => context
+                  .read<InfoUpdateCompanyCubit>()
+                  .passportChanged(passport),
+              decoration: const InputDecoration(
+                hintText: 'Enter your passport',
+              ),
+            ),
+          ));
 }
 
 class _countryInput extends StatelessWidget {
@@ -899,14 +1032,16 @@ class _countryInput extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) =>
-      BlocBuilder<InfoUpdateCubit, InfoUpdateState>(
+      BlocBuilder<InfoUpdateCompanyCubit, InfoUpdateCompanyState>(
           buildWhen: (final previous, current) =>
               previous.country != current.country,
           builder: (final context, final state) => Flexible(
                 child: TextFormField(
-                  key: const Key('infoUpdateForm_countryInput_TextField'),
-                  onChanged: (final country) =>
-                      context.read<InfoUpdateCubit>().countryChanged(country),
+                  key:
+                      const Key('infoUpdateCompanyForm_countryInput_TextField'),
+                  onChanged: (final country) => context
+                      .read<InfoUpdateCompanyCubit>()
+                      .countryChanged(country),
                   decoration: const InputDecoration(
                     hintText: 'Enter your country',
                   ),
@@ -920,21 +1055,22 @@ class _postCodeInput extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(final BuildContext context) =>
-      BlocBuilder<InfoUpdateCubit, InfoUpdateState>(
-          buildWhen: (final previous, current) =>
-              previous.postCode != current.postCode,
-          builder: (final context, final state) => Flexible(
-                child: TextFormField(
-                  key: const Key('infoUpdateForm_postCodeInput_TextField'),
-                  onChanged: (final postCode) =>
-                      context.read<InfoUpdateCubit>().postCodeChanged(postCode),
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter your post code',
-                  ),
-                ),
-              ));
+  Widget build(final BuildContext context) => BlocBuilder<
+          InfoUpdateCompanyCubit, InfoUpdateCompanyState>(
+      buildWhen: (final previous, current) =>
+          previous.postCode != current.postCode,
+      builder: (final context, final state) => Flexible(
+            child: TextFormField(
+              key: const Key('infoUpdateCompanyForm_postCodeInput_TextField'),
+              onChanged: (final postCode) => context
+                  .read<InfoUpdateCompanyCubit>()
+                  .postCodeChanged(postCode),
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                hintText: 'Enter your post code',
+              ),
+            ),
+          ));
 }
 
 class _cityInput extends StatelessWidget {
@@ -944,13 +1080,14 @@ class _cityInput extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) =>
-      BlocBuilder<InfoUpdateCubit, InfoUpdateState>(
+      BlocBuilder<InfoUpdateCompanyCubit, InfoUpdateCompanyState>(
           buildWhen: (final previous, current) => previous.city != current.city,
           builder: (final context, final state) => Flexible(
                 child: TextFormField(
-                    key: const Key('infoUpdateForm_cityInput_TextField'),
-                    onChanged: (final city) =>
-                        context.read<InfoUpdateCubit>().cityChanged(city),
+                    key: const Key('infoUpdateCompanyForm_cityInput_TextField'),
+                    onChanged: (final city) => context
+                        .read<InfoUpdateCompanyCubit>()
+                        .cityChanged(city),
                     decoration: const InputDecoration(
                       hintText: 'Enter your city',
                     )),
@@ -963,20 +1100,21 @@ class _provinceInput extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(final BuildContext context) =>
-      BlocBuilder<InfoUpdateCubit, InfoUpdateState>(
-          buildWhen: (final previous, current) =>
-              previous.province != current.province,
-          builder: (final context, final state) => Flexible(
-                child: TextFormField(
-                  key: const Key('infoUpdateForm_provinceInput_TextField'),
-                  onChanged: (final province) =>
-                      context.read<InfoUpdateCubit>().provinceChanged(province),
-                  decoration: const InputDecoration(
-                    hintText: 'Enter your province',
-                  ),
-                ),
-              ));
+  Widget build(final BuildContext context) => BlocBuilder<
+          InfoUpdateCompanyCubit, InfoUpdateCompanyState>(
+      buildWhen: (final previous, current) =>
+          previous.province != current.province,
+      builder: (final context, final state) => Flexible(
+            child: TextFormField(
+              key: const Key('infoUpdateCompanyForm_provinceInput_TextField'),
+              onChanged: (final province) => context
+                  .read<InfoUpdateCompanyCubit>()
+                  .provinceChanged(province),
+              decoration: const InputDecoration(
+                hintText: 'Enter your province',
+              ),
+            ),
+          ));
 }
 
 class _maritalInput extends StatefulWidget {
@@ -998,7 +1136,7 @@ class _maritalInputState extends State<_maritalInput> {
       'Divorced',
       'Widowed',
     ];
-    return BlocBuilder<InfoUpdateCubit, InfoUpdateState>(
+    return BlocBuilder<InfoUpdateCompanyCubit, InfoUpdateCompanyState>(
         buildWhen: (final previous, current) =>
             previous.marital != current.marital,
         builder: (final context, final state) => Row(
@@ -1026,7 +1164,9 @@ class _maritalInputState extends State<_maritalInput> {
                       setState(() {
                         dropdownvalue = newValue!;
                       });
-                      context.read<InfoUpdateCubit>().maritalChanged(newValue!);
+                      context
+                          .read<InfoUpdateCompanyCubit>()
+                          .maritalChanged(newValue!);
                     },
                   ),
                 ),
@@ -1042,18 +1182,156 @@ class _AddressInput extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) =>
-      BlocBuilder<InfoUpdateCubit, InfoUpdateState>(
+      BlocBuilder<InfoUpdateCompanyCubit, InfoUpdateCompanyState>(
         buildWhen: (final previous, final current) =>
             previous.address != current.address,
         builder: (final context, final state) => Flexible(
           child: TextFormField(
-            key: const Key('infoUpdateForm_addressInput_textField'),
+            key: const Key('infoUpdateCompanyForm_addressInput_textField'),
             onChanged: (final address) =>
-                context.read<InfoUpdateCubit>().addressChanged(address),
+                context.read<InfoUpdateCompanyCubit>().addressChanged(address),
             decoration: const InputDecoration(
               hintText: "Enter Your Address",
             ),
           ),
         ),
       );
+}
+
+class _registrationNumberInput extends StatelessWidget {
+  const _registrationNumberInput({
+    final Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(final BuildContext context) =>
+      BlocBuilder<InfoUpdateCompanyCubit, InfoUpdateCompanyState>(
+          buildWhen: (final previous, current) =>
+              previous.registrationNumber != current.registrationNumber,
+          builder: (final context, final state) => Flexible(
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  key: const Key(
+                      'infoUpdateCompanyForm_registrationNumberInput_TextField'),
+                  onChanged: (final registrationNumber) => context
+                      .read<InfoUpdateCompanyCubit>()
+                      .registrationNumberChanged(registrationNumber),
+                  decoration: const InputDecoration(
+                    hintText: '201901000005',
+                  ),
+                ),
+              ));
+}
+
+class _registrationTypeInput extends StatefulWidget {
+  const _registrationTypeInput({
+    final Key? key,
+  }) : super(key: key);
+
+  @override
+  State<_registrationTypeInput> createState() => _registrationTypeInputState();
+}
+
+class _registrationTypeInputState extends State<_registrationTypeInput> {
+  @override
+  Widget build(final BuildContext context) {
+    String dropdownvalue = 'Company Representative';
+    var items = [
+      'Company Representative',
+      'Transaction Approver',
+    ];
+    return BlocBuilder<InfoUpdateCompanyCubit, InfoUpdateCompanyState>(
+        buildWhen: (final previous, current) =>
+            previous.registrationType != current.registrationType,
+        builder: (final context, final state) => Row(
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black12,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: DropdownButton(
+                    value: state.registrationType,
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    items: items.map((String items) {
+                      return DropdownMenuItem(
+                        value: items,
+                        child: Text(items),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        dropdownvalue = newValue!;
+                      });
+                      context
+                          .read<InfoUpdateCompanyCubit>()
+                          .registrationTypeChanged(newValue!);
+                    },
+                  ),
+                ),
+              ],
+            ));
+  }
+}
+
+class _companyTypeInput extends StatefulWidget {
+  const _companyTypeInput({
+    final Key? key,
+  }) : super(key: key);
+
+  @override
+  State<_companyTypeInput> createState() => _companyTypeInputState();
+}
+
+class _companyTypeInputState extends State<_companyTypeInput> {
+  @override
+  Widget build(final BuildContext context) {
+    String dropdownvalue = 'Syarikat Sendirian Berhad';
+    var items = [
+      'Syarikat Sendirian Berhad',
+      'Organization/Cooperative',
+      'Partnership Business',
+    ];
+    return BlocBuilder<InfoUpdateCompanyCubit, InfoUpdateCompanyState>(
+        buildWhen: (final previous, current) =>
+            previous.companyType != current.companyType,
+        builder: (final context, final state) => Row(
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black12,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Expanded(
+                    child: DropdownButton(
+                      value: state.companyType,
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      items: items.map((String items) {
+                        return DropdownMenuItem(
+                          value: items,
+                          child: Text(items),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          dropdownvalue = newValue!;
+                        });
+                        context
+                            .read<InfoUpdateCompanyCubit>()
+                            .companyTypeChanged(newValue!);
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ));
+  }
 }

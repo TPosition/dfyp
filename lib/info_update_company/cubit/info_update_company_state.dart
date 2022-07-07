@@ -1,9 +1,9 @@
-part of 'info_update_cubit.dart';
+part of 'info_update_company_cubit.dart';
 
 enum ConfirmPasswordValidationError { invalid }
 
-class InfoUpdateState extends Equatable {
-  const InfoUpdateState({
+class InfoUpdateCompanyState extends Equatable {
+  const InfoUpdateCompanyState({
     final this.displayName = '',
     final this.mobile = '',
     final this.status = FormzStatus.pure,
@@ -20,8 +20,8 @@ class InfoUpdateState extends Equatable {
     final this.province = '',
     final this.marital = 'Single',
     final this.registrationNumber = '',
-    final this.registrationType = '',
-    final this.companyType = '',
+    final this.registrationType = 'Company Representative',
+    final this.companyType = 'Syarikat Sendirian Berhad',
   });
 
   final String displayName;
@@ -65,7 +65,7 @@ class InfoUpdateState extends Equatable {
         companyType,
       ];
 
-  InfoUpdateState copyWith({
+  InfoUpdateCompanyState copyWith({
     final String? displayName,
     final String? mobile,
     final FormzStatus? status,
@@ -85,7 +85,7 @@ class InfoUpdateState extends Equatable {
     final String? registrationType,
     final String? companyType,
   }) =>
-      InfoUpdateState(
+      InfoUpdateCompanyState(
         displayName: displayName ?? this.displayName,
         mobile: mobile ?? this.mobile,
         status: status ?? this.status,

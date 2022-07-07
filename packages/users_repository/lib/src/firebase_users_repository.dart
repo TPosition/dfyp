@@ -55,6 +55,9 @@ class FirebaseUsersRepository implements UsersRepository {
           city: '',
           province: '',
           marital: '',
+          registrationNumber: '',
+          registrationType: '',
+          companyType: '',
         );
       });
 }
