@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ispkp/common/views/success_page.dart';
+import 'package:ispkp/compounds/bloc/compounds_bloc.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import '/current_user/bloc/current_user_bloc.dart';
 import '/compound/cubit/compound_cubit.dart';
-import '/licenses/bloc/licenses_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:licenses_repository/licenses_repository.dart';
+import 'package:formz/formz.dart';
+import 'package:compounds_repository/compounds_repository.dart';
 
 class CompoundPage extends StatelessWidget {
   const CompoundPage({final Key? key}) : super(key: key);
@@ -20,188 +23,110 @@ class CompoundPage extends StatelessWidget {
         context.select((final CurrentUserBloc bloc) => bloc.state.user);
     final DateTime selectedDate = DateTime.now();
 
-    Future _selectDate(final BuildContext context) async {
-      final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101),
-      );
-      if (picked != null && picked != selectedDate) {
-        context.read<CompoundCubit>().datePicked(picked);
-      }
-    }
-
-    return BlocBuilder<LicensesBloc, LicensesState>(
+    return BlocBuilder<CompoundsBloc, CompoundsState>(
       builder: (final context, final state) {
-        if (state is LicensesLoaded) {
+        if (state is CompoundsLoaded) {
           return BlocProvider(
-            create: (final context) =>
-                CompoundCubit(licenses: state.licenses, uid: user.uid)..init(),
-            child: Scaffold(
-              backgroundColor: const Color(0xFFF4F4F4),
-              body: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Container(
-                    color: Colors.white,
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15, top: 50, bottom: 25),
-                          child: Row(
-                            children: <Widget>[
-                              IconButton(
-                                  icon: const Icon(Icons.arrow_back),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  }),
-                              const Text(
-                                'Pay Compound',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 10),
-                      child: Row(children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 1,
-                                  blurRadius: 4,
-                                  offset: const Offset(0, 1),
-                                ),
-                              ],
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 5),
-                            child: DropdownButtonHideUnderline(
-                              child: ButtonTheme(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 5),
-                                child:
-                                    BlocBuilder<CompoundCubit, CompoundState>(
-                                  builder: (final context, final state) =>
-                                      DropdownButton(
-                                    hint: const Text('Category'),
-                                    icon: const Icon(Icons.arrow_downward),
-                                    elevation: 16,
-                                    value: _dropdownValue,
-                                    items: [
-                                      DropdownMenuItem(
-                                        value: 1,
-                                        child: Text(
-                                          "All",
-                                          style: GoogleFonts.roboto(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ),
-                                      DropdownMenuItem(
-                                        value: 2,
-                                        child: Text(
-                                          "Transfer",
-                                          style: GoogleFonts.roboto(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ),
-                                      DropdownMenuItem(
-                                          value: 3,
-                                          child: Text(
-                                            "Received",
-                                            style: GoogleFonts.roboto(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w500),
-                                          )),
-                                      DropdownMenuItem(
-                                          value: 4,
-                                          child: Text(
-                                            "Top up",
-                                            style: GoogleFonts.roboto(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w500),
-                                          )),
-                                      DropdownMenuItem(
-                                        value: 5,
-                                        child: Text(
-                                          "Date",
-                                          style: GoogleFonts.roboto(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ),
-                                    ],
-                                    onChanged: (final int? value) {
-                                      if (value != null) {
-                                        context
-                                            .read<CompoundCubit>()
-                                            .searchChanged(value);
-                                      }
-
-                                      if (value == 5) {
-                                        _selectDate(context);
-                                      }
-                                    },
-                                  ),
-                                ),
+              lazy: false,
+              create: (final context) => CompoundCubit(
+                  compounds: state.compounds, razorpay: Razorpay()),
+              child: BlocProvider(
+                lazy: false,
+                create: (final context) => CompoundCubit(
+                  compounds: state.compounds
+                      .where((final element) => element.uid == user.uid)
+                      .toList(),
+                  razorpay: Razorpay(),
+                )..init(),
+                child: Scaffold(
+                  backgroundColor: const Color(0xFFF4F4F4),
+                  body: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 15, top: 50, bottom: 25),
+                        child: Row(
+                          children: <Widget>[
+                            IconButton(
+                                icon: const Icon(Icons.arrow_back),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                }),
+                            const Text(
+                              'Compound',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Colors.black,
                               ),
                             ),
+                          ],
+                        ),
+                      ),
+                      BlocBuilder<CompoundCubit, CompoundState>(
+                        buildWhen: (final previous, final current) =>
+                            previous.filteredCompoundsList !=
+                            current.filteredCompoundsList,
+                        builder: (final context, final state) =>
+                            BlocListener<CompoundCubit, CompoundState>(
+                          listener: (final context, final state) {
+                            if (state.status.isSubmissionSuccess) {
+                              try {
+                                context.read<CompoundsBloc>().add(
+                                      UpdateCompound(
+                                        Compound(
+                                          id: state.selectedCompound.id,
+                                          uid: user.uid,
+                                          agency: '',
+                                          amount: state.selectedCompound.amount,
+                                          reason: state.selectedCompound.reason,
+                                          plate: state.selectedCompound.plate,
+                                          isPaid: true,
+                                        ),
+                                      ),
+                                    );
+                              } on Exception {}
+                              Navigator.of(context)
+                                  .push<void>(SuccessPage.route());
+                            } else if (state.status.isSubmissionFailure) {
+                              ScaffoldMessenger.of(context)
+                                ..hideCurrentSnackBar()
+                                ..showSnackBar(
+                                  const SnackBar(
+                                      content: Text('Submit Failure')),
+                                );
+                            }
+                          },
+                          child: Expanded(
+                            child: ListView.builder(
+                                itemCount: state.filteredCompoundsList.isEmpty
+                                    ? state.compoundsList.length
+                                    : state.filteredCompoundsList.length,
+                                itemBuilder: (final BuildContext context,
+                                        final int index) =>
+                                    _compoundWidget(state
+                                            .filteredCompoundsList.isEmpty
+                                        ? state.compoundsList[index]
+                                        : state.filteredCompoundsList[index])),
                           ),
                         ),
-                      ]),
-                    ),
+                      ),
+                    ],
                   ),
-                  BlocBuilder<CompoundCubit, CompoundState>(
-                    buildWhen: (final previous, final current) =>
-                        previous.filteredLicensesList !=
-                        current.filteredLicensesList,
-                    builder: (final context, final state) => Expanded(
-                      child: ListView.builder(
-                          itemCount: state.filteredLicensesList.isEmpty
-                              ? state.licensesList.length
-                              : state.filteredLicensesList.length,
-                          itemBuilder: (final BuildContext context,
-                                  final int index) =>
-                              _compoundWidget(state.filteredLicensesList.isEmpty
-                                  ? state.licensesList[index]
-                                  : state.filteredLicensesList[index])),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
+                ),
+              ));
         }
         return const SizedBox();
       },
     );
   }
 
-  Widget _compoundWidget(final License? license) =>
+  Widget _compoundWidget(final Compound? compound) =>
       Builder(builder: (final context) {
         final user =
             context.select((final CurrentUserBloc bloc) => bloc.state.user);
-        if (license != null) {
+        if (compound != null && !compound.isPaid) {
           return SingleChildScrollView(
             child: Container(
               height: 80,
@@ -212,9 +137,9 @@ class CompoundPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
                     children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(right: 12),
-                        child: SizedBox(),
+                      const Padding(
+                        padding: EdgeInsets.only(right: 12),
+                        child: const SizedBox(),
                       ),
                       Expanded(
                         child: Padding(
@@ -224,7 +149,14 @@ class CompoundPage extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  license.id.substring(0, 6),
+                                  compound.plate,
+                                  style: GoogleFonts.roboto(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14),
+                                  textAlign: TextAlign.left,
+                                ),
+                                Text(
+                                  compound.reason,
                                   style: GoogleFonts.roboto(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 14),
@@ -240,26 +172,28 @@ class CompoundPage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Text("pe"),
-                              const SizedBox(
-                                height: 5,
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    textStyle: const TextStyle(
+                                  fontSize: 12,
+                                )),
+                                onPressed: () async {
+                                  context
+                                      .read<CompoundCubit>()
+                                      .selectedCompoundChanged(compound);
+
+                                  await context
+                                      .read<CompoundCubit>()
+                                      .payCompound(
+                                        user.uid,
+                                        user.email,
+                                        user.displayName,
+                                        user.mobile,
+                                        compound.amount,
+                                      );
+                                },
+                                child: Text('Pay ${compound.amount}'),
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Text(
-                                      " ${license.timestamp.day}/${license.timestamp.month}/${license.timestamp.year} ${license.timestamp.hour}:${license.timestamp.minute}",
-                                      textAlign: TextAlign.right,
-                                      style: GoogleFonts.roboto(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
                             ],
                           ),
                         ),

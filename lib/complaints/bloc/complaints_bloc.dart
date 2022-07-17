@@ -21,13 +21,11 @@ class ComplaintsBloc extends Bloc<ComplaintsEvent, ComplaintsState> {
   final ComplaintsRepository _complaintsRepository;
 
   Future<void> _onLoadComplaints(
-      final LoadComplaints event, final Emitter<ComplaintsState> emit) {
-    print('yandex');
-    return emit.onEach<List<Complaint>>(
-      _complaintsRepository.complaints(),
-      onData: (final complaints) => add(ComplaintsUpdated(complaints)),
-    );
-  }
+          final LoadComplaints event, final Emitter<ComplaintsState> emit) =>
+      emit.onEach<List<Complaint>>(
+        _complaintsRepository.complaints(),
+        onData: (final complaints) => add(ComplaintsUpdated(complaints)),
+      );
 
   void _onAddComplaint(
       final AddComplaint event, final Emitter<ComplaintsState> emit) {

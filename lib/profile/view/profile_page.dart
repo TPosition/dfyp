@@ -91,6 +91,14 @@ class ProfilePage extends StatelessWidget {
                                 const SizedBox(
                                   height: 10,
                                 ),
+                                const _InfoID(),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                _InfoUserID(user: user),
+                                const SizedBox(
+                                  height: 20,
+                                ),
                                 const _InfoName(),
                                 const SizedBox(
                                   height: 15,
@@ -749,4 +757,57 @@ class _InfoCompanyType extends StatelessWidget {
           ],
         ),
       );
+}
+
+class _InfoUserID extends StatelessWidget {
+  const _InfoUserID({
+    required final this.user,
+    final Key? key,
+  }) : super(key: key);
+
+  final User user;
+
+  @override
+  Widget build(final BuildContext context) => Padding(
+      padding: const EdgeInsets.only(
+        left: 25,
+        right: 25,
+        top: 2,
+      ),
+      child: Row(
+        children: <Widget>[
+          Flexible(
+            child: Text(
+              user.uid.substring(0, 5),
+              style: GoogleFonts.roboto(
+                fontSize: 18,
+              ),
+            ),
+          ),
+        ],
+      ));
+}
+
+class _InfoID extends StatelessWidget {
+  const _InfoID({
+    final Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(final BuildContext context) => Padding(
+      padding: const EdgeInsets.only(left: 25, right: 25, top: 25),
+      child: Row(
+        children: <Widget>[
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                'ID',
+                style: GoogleFonts.roboto(
+                    fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ],
+      ));
 }

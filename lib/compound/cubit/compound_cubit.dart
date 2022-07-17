@@ -1,64 +1,98 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:licenses_repository/licenses_repository.dart';
+import 'package:compounds_repository/compounds_repository.dart';
+import 'package:formz/formz.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 part 'compound_state.dart';
 
 class CompoundCubit extends Cubit<CompoundState> {
   CompoundCubit(
-      {required final List<License> licenses, required final String uid})
-      : _licenses = licenses,
-        _uid = uid,
-        super(const CompoundState());
+      {required final List<Compound> compounds,
+      required final Razorpay razorpay})
+      : _compounds = compounds,
+        _razorpay = razorpay,
+        super(
+          CompoundState(
+            selectedCompound: Compound(
+              uid: 'uid',
+              amount: 0,
+              reason: 'reason',
+              agency: 'agency',
+              plate: 'plate',
+              isPaid: false,
+            ),
+          ),
+        );
 
-  final List<License> _licenses;
-  final String _uid;
+  final List<Compound> _compounds;
+  final Razorpay _razorpay;
 
   void init() {
-    emit(state.copyWith(licensesList: _licenses));
+    emit(state.copyWith(compoundsList: _compounds));
 
-    // sort by compound
-    if (_licenses.isNotEmpty) {
-      List<License?> filtered = state.licensesList.map((final license) {
-        if (license.uid == _uid) {
-          return license;
-        }
-        return null;
-      }).toList();
+    _razorpay
+      ..on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess)
+      ..on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError)
+      ..on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  void selectedCompoundChanged(final Compound value) {
+    emit(
+      state.copyWith(
+        selectedCompound: value,
+      ),
+    );
+  }
+
+  Future<void> payCompound(
+    final String uid,
+    final String email,
+    final String displayName,
+    final String mobile,
+    final num amount,
+  ) async {
+    try {
+      final options = {
+        'key': 'rzp_test_HrKYY6mdiMRJLt',
+        'amount':
+            (double.parse(amount.toString()) * 100.roundToDouble()).toString(),
+        'name': displayName,
+        'description': 'Top up wallet',
+        'prefill': {'contact': mobile, 'email': email},
+        'external': {
+          'wallets': [''],
+        },
+        'currency': 'MYR'
+      };
+
+      _razorpay.open(options);
+    } on Exception catch (e) {
+      throw Exception(e);
     }
   }
 
-  void searchChanged(final int value) {
-    // sort by compound
-    if (value == 1) {
-      List<License?> filtered = state.licensesList.map((final license) {
-        if (license.uid == _uid) {
-          return license;
-        }
-        return null;
-      }).toList();
-
-      // filtered.sort((final a, final b) => a!.compound.compareTo(b!.compound));
-      filtered = filtered.whereType<License>().toList();
-
-      if (filtered != null) {
-        List<License> NonEmptyFiltered(List<License?> filtered) =>
-            List.from(filtered);
-        emit(state.copyWith(licensesList: NonEmptyFiltered(filtered)));
-      }
-    }
+  void _handlePaymentSuccess(final PaymentSuccessResponse response) {
+    emit(
+      state.copyWith(
+        status: FormzStatus.submissionSuccess,
+      ),
+    );
   }
 
-  void datePicked(final DateTime picked) {
-    final List<License?> filtered = state.licensesList.map((final license) {
-      if (license.timestamp.year == picked.year &&
-          license.timestamp.month == picked.month &&
-          license.timestamp.day == picked.day) {
-        return license;
-      }
-      return null;
-    }).toList();
+  void _handlePaymentError(final PaymentFailureResponse response) {
+    emit(
+      state.copyWith(
+        status: FormzStatus.submissionFailure,
+      ),
+    );
+  }
 
-    emit(state.copyWith(filteredLicensesList: filtered));
+  void _handleExternalWallet(final ExternalWalletResponse response) {
+    emit(
+      state.copyWith(
+        status: FormzStatus.submissionFailure,
+      ),
+    );
   }
 }

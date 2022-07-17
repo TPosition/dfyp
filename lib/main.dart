@@ -1,6 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:complaints_repository/complaint_repository.dart';
+import 'package:compounds_repository/compounds_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:licenses_repository/licenses_repository.dart';
@@ -18,6 +19,7 @@ Future<void> main() async {
   final transactionsRepository = FirebaseTransactionsRepository();
   final licensesRepository = FirebaseLicensesRepository();
   final complaintsRepository = FirebaseComplaintsRepository();
+  final compoundsRepository = FirebaseCompoundsRepository();
   runApp(
     App(
       transactionsRepository: transactionsRepository,
@@ -25,6 +27,7 @@ Future<void> main() async {
       authenticationRepository: authenticationRepository,
       licensesRepository: licensesRepository,
       complaintsRepository: complaintsRepository,
+      compoundsRepository: compoundsRepository,
     ),
   );
 }

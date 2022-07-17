@@ -1,5 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:complaints_repository/complaint_repository.dart';
+import 'package:compounds_repository/compounds_repository.dart';
+import 'package:ispkp/compounds/bloc/compounds_bloc.dart';
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,12 +23,14 @@ class App extends StatelessWidget {
     required final FirebaseTransactionsRepository transactionsRepository,
     required final FirebaseLicensesRepository licensesRepository,
     required final FirebaseComplaintsRepository complaintsRepository,
+    required final FirebaseCompoundsRepository compoundsRepository,
     final Key? key,
   })  : _authenticationRepository = authenticationRepository,
         _usersRepository = usersRepository,
         _transactionsRepository = transactionsRepository,
         _licensesRepository = licensesRepository,
         _complaintsRepository = complaintsRepository,
+        _compoundsRepository = compoundsRepository,
         super(key: key);
 
   final AuthenticationRepository _authenticationRepository;
@@ -34,57 +38,66 @@ class App extends StatelessWidget {
   final FirebaseTransactionsRepository _transactionsRepository;
   final FirebaseLicensesRepository _licensesRepository;
   final FirebaseComplaintsRepository _complaintsRepository;
+  final FirebaseCompoundsRepository _compoundsRepository;
 
   @override
   Widget build(final BuildContext context) => RepositoryProvider.value(
-        value: _complaintsRepository,
+        value: _compoundsRepository,
         child: RepositoryProvider.value(
-          value: _licensesRepository,
+          value: _complaintsRepository,
           child: RepositoryProvider.value(
-            value: _usersRepository,
+            value: _licensesRepository,
             child: RepositoryProvider.value(
-              value: _authenticationRepository,
-              child: MultiBlocProvider(
-                providers: [
-                  BlocProvider(
-                    create: (final _) => AppBloc(
-                      authenticationRepository: _authenticationRepository,
+              value: _usersRepository,
+              child: RepositoryProvider.value(
+                value: _authenticationRepository,
+                child: MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (final _) => AppBloc(
+                        authenticationRepository: _authenticationRepository,
+                      ),
                     ),
+                    BlocProvider<UsersBloc>(
+                      create: (final context) => UsersBloc(
+                        usersRepository: _usersRepository,
+                      )..add(LoadUsers()),
+                    ),
+                    BlocProvider<TransactionsBloc>(
+                      create: (final context) => TransactionsBloc(
+                        transactionsRepository: _transactionsRepository,
+                      )..add(LoadTransactions()),
+                    ),
+                    BlocProvider<LicensesBloc>(
+                      create: (final context) => LicensesBloc(
+                        licensesRepository: _licensesRepository,
+                      )..add(LoadLicenses()),
+                    ),
+                    BlocProvider<ComplaintsBloc>(
+                      create: (final context) => ComplaintsBloc(
+                        complaintsRepository: _complaintsRepository,
+                      )..add(LoadComplaints()),
+                    ),
+                    BlocProvider<CompoundsBloc>(
+                      create: (final context) => CompoundsBloc(
+                        compoundsRepository: _compoundsRepository,
+                      )..add(LoadCompounds()),
+                    ),
+                  ],
+                  child: BlocBuilder<AppBloc, AppState>(
+                    builder: (final context, final state) {
+                      final auth = context
+                          .select((final AppBloc bloc) => bloc.state.user);
+                      final _currentUserBloc = CurrentUserBloc(
+                        uid: auth.id,
+                        usersRepository: _usersRepository,
+                      );
+                      return BlocProvider.value(
+                        value: _currentUserBloc,
+                        child: const AppView(),
+                      );
+                    },
                   ),
-                  BlocProvider<UsersBloc>(
-                    create: (final context) => UsersBloc(
-                      usersRepository: _usersRepository,
-                    )..add(LoadUsers()),
-                  ),
-                  BlocProvider<TransactionsBloc>(
-                    create: (final context) => TransactionsBloc(
-                      transactionsRepository: _transactionsRepository,
-                    )..add(LoadTransactions()),
-                  ),
-                  BlocProvider<LicensesBloc>(
-                    create: (final context) => LicensesBloc(
-                      licensesRepository: _licensesRepository,
-                    )..add(LoadLicenses()),
-                  ),
-                  BlocProvider<ComplaintsBloc>(
-                    create: (final context) => ComplaintsBloc(
-                      complaintsRepository: _complaintsRepository,
-                    )..add(LoadComplaints()),
-                  ),
-                ],
-                child: BlocBuilder<AppBloc, AppState>(
-                  builder: (final context, final state) {
-                    final auth =
-                        context.select((final AppBloc bloc) => bloc.state.user);
-                    final _currentUserBloc = CurrentUserBloc(
-                      uid: auth.id,
-                      usersRepository: _usersRepository,
-                    );
-                    return BlocProvider.value(
-                      value: _currentUserBloc,
-                      child: const AppView(),
-                    );
-                  },
                 ),
               ),
             ),

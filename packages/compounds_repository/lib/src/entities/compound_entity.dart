@@ -7,46 +7,56 @@ import 'package:equatable/equatable.dart';
 
 class CompoundEntity extends Equatable {
   final String id;
-  final double amount;
+  final String uid;
+  final num amount;
   final String reason;
   final String agency;
   final String plate;
   final DateTime timestamp;
+  final bool isPaid;
 
-  const CompoundEntity(
-      {required this.id,
-      required this.amount,
-      required this.agency,
-      required this.reason,
-      required this.plate,
-      required this.timestamp});
+  const CompoundEntity({
+    required this.id,
+    required this.uid,
+    required this.amount,
+    required this.agency,
+    required this.reason,
+    required this.plate,
+    required this.timestamp,
+    required this.isPaid,
+  });
 
   Map<String, Object?> toJson() {
     return {
       'id': id,
+      'uid': uid,
       'amount': amount,
       'reason': reason,
       'agency': agency,
       'plate': plate,
       'timestamp': timestamp,
+      'isPaid': isPaid,
     };
   }
 
   @override
-  List<Object?> get props => [id, amount, agency, reason, plate, timestamp];
+  List<Object?> get props =>
+      [id, uid, amount, agency, reason, plate, timestamp, isPaid];
 
   @override
   String toString() {
-    return 'CompoundEntity { id: $id,amount: $amount,agency: $agency,reason: $reason, plate: $plate,timestamp: $timestamp }';
+    return 'CompoundEntity { id: $id,uid:$uid, amount: $amount,agency: $agency,reason: $reason, plate: $plate,timestamp: $timestamp , isPaid,$isPaid,}';
   }
 
   static CompoundEntity fromJson(Map<String, Object> json) {
     return CompoundEntity(
       id: json['id'] as String,
-      amount: json['amount'] as double,
+      uid: json['uid'] as String,
+      amount: json['amount'] as num,
       agency: json['agency'] as String,
       reason: json['reason'] as String,
       plate: json['plate'] as String,
+      isPaid: json['isPaid'] as bool,
       timestamp: (json['timestamp'] as Timestamp).toDate(),
     );
   }
@@ -56,10 +66,12 @@ class CompoundEntity extends Equatable {
     if (data == null) throw Exception();
     return CompoundEntity(
       id: data['id'],
+      uid: data['uid'],
       amount: data['amount'],
       agency: data['agency'],
       plate: data['plate'],
       reason: data['reason'],
+      isPaid: data['isPaid'],
       timestamp: (data['timestamp'] as Timestamp).toDate(),
     );
   }
@@ -67,11 +79,13 @@ class CompoundEntity extends Equatable {
   Map<String, Object?> toDocument() {
     return {
       'id': id,
+      'uid': uid,
       'amount': amount,
       'reason': reason,
       'agency': agency,
       'plate': plate,
       'timestamp': timestamp,
+      'isPaid': isPaid,
     };
   }
 }

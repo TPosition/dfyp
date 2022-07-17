@@ -108,7 +108,11 @@ class HomePage extends StatelessWidget {
                       Navigator.of(context).push(ApplicationPage.route());
                     },
                     color: Color.fromRGBO(250, 250, 252, 1),
-                    child: Image.asset('assets/icon_envelope.png'),
+                    child: Image.asset(
+                      'assets/icon_envelope.png',
+                      height: 60,
+                      width: 60,
+                    ),
                   ),
                 ),
                 Container(
@@ -138,7 +142,11 @@ class HomePage extends StatelessWidget {
                       Navigator.of(context).push(RenewalPage.route());
                     },
                     color: const Color.fromRGBO(250, 250, 252, 1),
-                    child: Image.asset('assets/icon_license.png'),
+                    child: Image.asset(
+                      'assets/icon_license.png',
+                      height: 70,
+                      width: 70,
+                    ),
                   ),
                 ),
                 Container(
@@ -168,7 +176,11 @@ class HomePage extends StatelessWidget {
                       Navigator.of(context).push(StatusPage.route());
                     },
                     color: Color.fromRGBO(250, 250, 252, 1),
-                    child: Image.asset('assets/icon_approve.png'),
+                    child: Image.asset(
+                      'assets/icon_approve.png',
+                      height: 60,
+                      width: 60,
+                    ),
                   ),
                 ),
                 Container(
@@ -208,7 +220,11 @@ class HomePage extends StatelessWidget {
                             Navigator.of(context).push(CompoundPage.route());
                           },
                           color: Color.fromRGBO(250, 250, 252, 1),
-                          child: Image.asset('assets/icon_hammer.png'),
+                          child: Image.asset(
+                            'assets/icon_hammer.png',
+                            height: 70,
+                            width: 70,
+                          ),
                         ),
                       );
                     }
@@ -242,7 +258,11 @@ class HomePage extends StatelessWidget {
                       Navigator.of(context).push(ComplaintPage.route());
                     },
                     color: Color.fromRGBO(250, 250, 252, 1),
-                    child: Image.asset('assets/icon_comment.png'),
+                    child: Image.asset(
+                      'assets/icon_comment.png',
+                      height: 60,
+                      width: 60,
+                    ),
                   ),
                 ),
                 Container(
@@ -272,7 +292,11 @@ class HomePage extends StatelessWidget {
                       Navigator.of(context).push(FaqPage.route());
                     },
                     color: Color.fromRGBO(250, 250, 252, 1),
-                    child: Image.asset('assets/icon_qna.png'),
+                    child: Image.asset(
+                      'assets/icon_qna.png',
+                      height: 60,
+                      width: 60,
+                    ),
                   ),
                 ),
                 Container(
